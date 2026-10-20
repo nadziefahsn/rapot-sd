@@ -799,6 +799,11 @@ return [
                 'url' => 'admin/sekolah',
                 'icon' => 'fas fa-school',
             ],
+            [
+                'text' => 'Tahun Pelajaran',
+                'url' => 'admin/tahun_ajaran',
+                'icon' => 'fas fa-calendar-alt',
+            ],
         ],
     ],
 ],
