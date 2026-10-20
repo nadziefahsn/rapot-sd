@@ -54,7 +54,7 @@ class SekolahController extends Controller
         $sekolah->update($data);
 
         return redirect()
-            ->route('admin.sekolah.index')
+            ->route('sekolah.index')
             ->with('success', 'Profil sekolah berhasil diperbarui');
 }
 
