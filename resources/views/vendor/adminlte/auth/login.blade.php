@@ -22,9 +22,9 @@
         <label for="email" class="visually-hidden">{{ __('adminlte::adminlte.email') }}</label>
 
         <div class="input-group mb-3">
-            <input type="email" name="email" id="email"
+            <input type="text" name="email" id="email"
                 class="form-control @error('email') is-invalid @enderror"
-                value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}" autofocus>
+                value="{{ old('email') }}" placeholder="NIPY" autofocus>
 
             <div class="input-group-text">
                 <span class="bi bi-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>

@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\TahunAjaranController;
-use App\Models\TahunAjaran;
+use App\Http\Controllers\GuruController;
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -15,6 +16,11 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('/admin/sekolah', SekolahController::class)->except(['create','show','edit','destroy'])->whereNumber('sekolah');
+Route::resource('/admin/guru', GuruController::class)->except(['create','show','edit'])->whereNumber('guru');
+Route::get('/admin/guru/{id}/edit-password', [GuruController::class, 'editPassword'])->name('guru.edit-password');
+        Route::put('/admin/guru/{id}/update-password', [GuruController::class, 'updatePassword'])->name('guru.update-password');
+        Route::put('/admin/guru/{id}/update-user', [GuruController::class, 'updateUser'])->name('guru.update-user');
+        Route::post('/admin/guru/import', [GuruController::class, 'import'])->name('guru.import');
 
 Route::resource('/admin/tahun_ajaran', TahunAjaranController::class);
 
