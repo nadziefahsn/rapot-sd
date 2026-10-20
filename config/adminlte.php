@@ -799,6 +799,11 @@ return [
                 'url' => 'admin/sekolah',
                 'icon' => 'fas fa-school',
             ],
+            [
+                'text' => 'Guru',
+                'url' => 'admin/guru',
+                'icon' => 'fas fa-chalkboard-teacher',
+            ],
         ],
     ],
 ],
@@ -839,21 +844,21 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/2.1.8/js/dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css',
                 ],
             ],
