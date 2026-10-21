@@ -50,7 +50,7 @@
                 
                 @forelse ($pengumumans as $item)
                 <div>
-                    <div class="timeline-icon bg-primary text-white">
+                    <div class="timeline-icon bg-primary text-white d-flex align-items-center justify-content-center">
                         <i class="fas fa-envelope"></i>
                     </div>
                     <div class="timeline-item border shadow-none">
@@ -83,7 +83,7 @@
                 </div> 
                 @empty
                 <div>
-                    <div class="timeline-icon bg-secondary text-white">
+                    <div class="timeline-icon bg-secondary text-white d-flex align-items-center justify-content-center">
                         <i class="fas fa-info"></i>
                     </div>
                     <div class="timeline-item border shadow-none">
@@ -93,9 +93,8 @@
                     </div>
                 </div>
                 @endforelse
-
                 <div>
-                    <div class="timeline-icon bg-secondary text-white">
+                    <div class="timeline-icon bg-secondary text-white d-flex align-items-center justify-content-center">
                         <i class="fas fa-clock"></i>
                     </div>
                 </div>
@@ -109,17 +108,24 @@
 @stop
 
 @section('css')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" rel="stylesheet">
+\<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" rel="stylesheet">
 @stop
 
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#modalTambahPengumuman').on('shown.bs.modal', function () {
+\        $('#modalTambahPengumuman').on('shown.bs.modal', function () {
             $('#isi_pengumuman').summernote({
                 height: 250,
                 placeholder: 'Tulis isi pengumuman...'
+            });
+        });
+
+        $('.modal').on('shown.bs.modal', function () {
+            $(this).find('.summernote-edit').summernote({
+                height: 200,
+                placeholder: 'Edit isi pengumuman...'
             });
         });
     });
