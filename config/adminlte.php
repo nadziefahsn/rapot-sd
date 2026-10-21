@@ -816,6 +816,11 @@ return [
                 'icon' => 'fas fa-layer-group',
 
             ],
+            [
+                'text' => 'Peserta Didik',
+                'url' => 'admin/siswa',
+                'icon' => 'fas fa-user-graduate',
+            ],
         ],
     ],
 ],

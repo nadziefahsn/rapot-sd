@@ -7,6 +7,7 @@ use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\TahunAjaranController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\SiswaController;
 
 
 Route::get('/', function () {
@@ -26,4 +27,9 @@ Route::resource('/admin/tahun_ajaran', TahunAjaranController::class);
 Route::resource('/admin/kelas', KelasController::class)->parameters([
     'kelas' => 'kelas'
 ]);
+Route::post('/admin/siswa/import', [SiswaController::class, 'import'])->name('siswa.import');
+Route::get('/admin/siswa/import', function () {
+    return redirect()->route('siswa.index');
+});
+Route::resource('/admin/siswa', SiswaController::class)->except(['show']);
 
