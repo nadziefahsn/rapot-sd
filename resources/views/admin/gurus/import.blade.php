@@ -1,29 +1,28 @@
 <div class="modal fade" id="modalImportGuru" tabindex="-1" role="dialog" aria-labelledby="modalImportGuruLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content border-0 shadow">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
             
-            <div class="modal-header bg-white border-0 pt-4 px-4 pb-0">
-                <h5 class="modal-title font-weight-normal text-dark" id="modalImportGuruLabel">Import Data Guru</h5>
+            <div class="modal-header text-white text-center d-block py-4 border-0" style="background: linear-gradient(135deg, #343A40 0%, #495057 100%);">
+                <h5 class="modal-title font-weight-bold text-white mb-1" id="modalImportGuruLabel">
+                    Import Data Guru 📥
+                </h5>
+                <small class="text-white-50">Upload file Excel (.xlsx / .xls) untuk mengimpor data</small>
             </div>
 
             <form action="{{ route('guru.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="modal-body px-4 py-3">
-                    <div class="form-group row align-items-center mb-2">
-                        <label for="file" class="col-sm-3 col-form-label font-weight-bold text-dark">File Import</label>
-                        <div class="col-sm-9">
-                            <div class="custom-file">
-                                <input type="file" name="file" class="custom-file-input" id="fileImport" required accept=".xlsx, .xls" onchange="updateFileName(this)">
-                                <label class="custom-file-label" for="fileImport" id="fileImportLabel">Pilih file</label>
-                            </div>
-                        </div>
+                <div class="modal-body p-4">
+                    <div class="form-group mb-3">
+                        <label for="fileImport" class="form-label font-weight-bold text-dark">
+                            File Excel <span class="text-danger">*</span>
+                        </label>
+                        <input type="file" name="file" class="form-control form-control-lg" id="fileImport" required accept=".xlsx, .xls">
                     </div>
-
                 </div>
 
-                <div class="modal-footer bg-white border-0 px-4 pb-4 pt-0 justify-content-end">
-                    <button type="button" class="btn btn-outline-secondary px-4 mr-2" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary px-4">Import</button>
+                <div class="modal-footer bg-light border-0 px-4 py-3 justify-content-end">
+                    <button type="button" class="btn btn-link text-secondary text-decoration-none mr-2" data-bs-dismiss="modal" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary px-4 py-2 font-weight-bold rounded-3">Import Data</button>
                 </div>
             </form>
 

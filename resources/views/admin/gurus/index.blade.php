@@ -55,11 +55,12 @@
                         <td>{{ $item->jabatan }}</td>
                         <td class="text-center">
                             <nobr>
-                                <a href="{{ route('guru.edit-password', $item->id) }}" 
-                                   class="btn btn-xs btn-default text-warning mx-1 shadow" 
-                                   title="Reset Password">
+                                <button type="button" 
+                                        class="btn btn-xs btn-default text-warning mx-1 shadow" 
+                                        title="Reset Password"
+                                        onclick="bukaModalReset('{{ route('guru.update-password', $item->id) }}')">
                                     <i class="fa fa-lg fa-fw fa-user-cog"></i>
-                                </a>
+                                </button>
 
                                 <button type="button" 
                                         class="btn btn-xs btn-default text-primary mx-1 shadow" 
@@ -89,6 +90,7 @@
 @include('admin.gurus.create')
 @include('admin.gurus.edit')
 @include('admin.gurus.import')
+@include('admin.gurus.reset-password')
 
 @stop
 
@@ -96,12 +98,10 @@
 
 
 @section('css')
-    <!-- CSS DataTables Bootstrap 5 -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 @stop
 
 @section('js')
-    <!-- JS DataTables & jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
@@ -116,14 +116,16 @@
                 "searching": true,
                 "lengthChange": true,
                 "columnDefs": [
-                    { "orderable": false, "targets": 4 } // Mematikan sorting untuk kolom Aksi
+                    { "orderable": false, "targets": 4 }
                 ]
             });
 
             bsCustomFileInput.init();
 
             @if ($errors->any())
-                @if(session('edit_id'))
+                @if(session('reset_id'))
+                    $('#modalResetPassword{{ session('reset_id') }}').modal('show');
+                @elseif(session('edit_id'))
                     $('#editModal{{ session('edit_id') }}').modal('show');
                 @elseif($errors->has('file'))
                     $('#modalImportGuru').modal('show');
@@ -132,5 +134,32 @@
                 @endif
             @endif
         });
-    </script>
+
+        function bukaModalReset(actionUrl) {
+            var form = document.getElementById('formResetPassword');
+            if (form) form.setAttribute('action', actionUrl);
+
+            var modal = document.getElementById('modalResetPassword');
+            if (modal) {
+                modal.style.display = 'block';
+                document.body.classList.add('modal-open');
+                
+                setTimeout(function () {
+                    modal.classList.add('show');
+                }, 20);
+            }
+        }
+
+        function tutupModalReset() {
+            var modal = document.getElementById('modalResetPassword');
+            if (modal) {
+                modal.classList.remove('show');
+                
+                setTimeout(function () {
+                    modal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                }, 300);
+            }
+        }
+    </script> 
 @stop
