@@ -10,7 +10,7 @@ class TahunAjaranController extends Controller
 
     public function index()
     {
-        $tahun_ajarans = TahunAjaran::all();
+        $tahun_ajarans = TahunAjaran::latest()->get();
 
         return view('admin.tahun.index', compact('tahun_ajarans'));
     }

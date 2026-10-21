@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sekolah;
-use App\Http\Requests\SekolahUpdateRequest;
+use App\Http\Requests\SekolahRequest;
 
 class SekolahController extends Controller
 {
@@ -23,7 +23,7 @@ class SekolahController extends Controller
     }
 
 
-    public function store(SekolahUpdateRequest $request)
+    public function store(SekolahRequest $request)
     {
         $data = $request-> validated();
 
@@ -47,7 +47,7 @@ class SekolahController extends Controller
        
     }
 
-    public function update (SekolahUpdateRequest $request, Sekolah $sekolah) 
+    public function update (SekolahRequest $request, Sekolah $sekolah) 
     {
         $data = $request->validated();
 
