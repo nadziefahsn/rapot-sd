@@ -791,6 +791,11 @@ return [
         ],
         ['header' => 'MENU UTAMA'],
         [
+            'text' => 'Pengumuman',
+            'url' => 'admin/pengumuman',
+            'icon' => 'fas fa-bullhorn',
+        ],
+        [
         'text' => 'Data Master',
         'icon' => 'fas fa-server',
         'submenu' => [
@@ -1072,6 +1077,21 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js',
+                ],
+            ],
+        ],
+        'summernote' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js',
                 ],
             ],
         ],
