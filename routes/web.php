@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\TahunAjaranController;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\KelasController;
 
 
 Route::get('/', function () {
@@ -21,7 +22,8 @@ Route::get('/admin/guru/{id}/edit-password', [GuruController::class, 'editPasswo
         Route::put('/admin/guru/{id}/update-password', [GuruController::class, 'updatePassword'])->name('guru.update-password');
         Route::put('/admin/guru/{id}/update-user', [GuruController::class, 'updateUser'])->name('guru.update-user');
         Route::post('/admin/guru/import', [GuruController::class, 'import'])->name('guru.import');
-
 Route::resource('/admin/tahun_ajaran', TahunAjaranController::class);
-
+Route::resource('/admin/kelas', KelasController::class)->parameters([
+    'kelas' => 'kelas'
+]);
 

@@ -133,7 +133,7 @@ return [
     */
 
     'preloader' => [
-        'enabled' => true,
+        'enabled' => false,
         'mode' => 'fullscreen',
         'img' => [
             'path' => 'vendor/adminlte/dist/assets/img/AdminLTELogo.png',
@@ -808,6 +808,12 @@ return [
                 'text' => 'Guru',
                 'url' => 'admin/guru',
                 'icon' => 'fas fa-chalkboard-teacher',
+
+            ],
+            [
+                'text' => 'Kelas & Wali',
+                'url' => 'admin/kelas',
+                'icon' => 'fas fa-layer-group',
 
             ],
         ],
