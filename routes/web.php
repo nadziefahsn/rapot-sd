@@ -25,7 +25,6 @@ Route::get('/admin/guru/{id}/edit-password', [GuruController::class, 'editPasswo
         Route::put('/admin/guru/{id}/update-user', [GuruController::class, 'updateUser'])->name('guru.update-user');
         Route::post('/admin/guru/import', [GuruController::class, 'import'])->name('guru.import');
 Route::resource('/admin/tahun_ajaran', TahunAjaranController::class);
-<<<<<<< HEAD
 Route::resource('/admin/kelas', KelasController::class)->parameters([
     'kelas' => 'kelas'
 ]);
@@ -34,9 +33,6 @@ Route::get('/admin/siswa/import', function () {
     return redirect()->route('siswa.index');
 });
 Route::resource('/admin/siswa', SiswaController::class)->except(['show']);
-=======
 Route::resource('/admin/pengumuman', PengumumanController::class);
 
-
->>>>>>> pengumuman
 
