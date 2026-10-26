@@ -10,6 +10,8 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\AnggotaKelasController;
+use App\Http\Controllers\MapelController;
+use App\Http\Controllers\DeskripsiController;
 
 
 Route::get('/', function () {
@@ -39,4 +41,7 @@ Route::resource('/admin/pengumuman', PengumumanController::class);
 Route::resource('/admin/anggota-kelas', AnggotaKelasController::class)->parameters([
             'anggota-kelas' => 'anggotaKelas'
         ]);
+Route::resource('/admin/mapel', MapelController::class)->except(['show']);
+Route::resource('/admin/deskripsi', DeskripsiController::class)->except(['show']);
+Route::post('admin/deskripsi/duplicate', [DeskripsiController::class, 'duplicateFromPreviousSemester'])->name('deskripsi.duplicate');
 

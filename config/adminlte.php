@@ -831,6 +831,16 @@ return [
                 'url' => 'admin/anggota-kelas',
                 'icon' => 'fas fa-users',
             ],
+            [
+                'text' => 'Mata Pelajaran',
+                'url' => 'admin/mapel',
+                'icon' => 'fas fa-book-open',
+            ],
+            [
+                'text' => 'Deskripsi Mapel',
+                'url' => 'admin/deskripsi',
+                'icon' => 'fas fa-clipboard-list',
+            ],
         ],
     ],
 ],
