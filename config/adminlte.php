@@ -826,6 +826,11 @@ return [
                 'url' => 'admin/siswa',
                 'icon' => 'fas fa-user-graduate',
             ],
+            [
+                'text' => 'Anggota Kelas',
+                'url' => 'admin/anggota-kelas',
+                'icon' => 'fas fa-users',
+            ],
         ],
     ],
 ],

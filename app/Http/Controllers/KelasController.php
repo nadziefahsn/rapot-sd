@@ -5,40 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Kelas;
 use App\Models\Guru;
 use App\Models\TahunAjaran;
-use App\Http\Requests\KelasRequest;
 use Illuminate\Http\Request;
+use App\Http\Requests\KelasRequest;
 use Illuminate\Support\Facades\DB;
 
 class KelasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $tahunAjarans = TahunAjaran::latest()->first();
-        if ($tahunAjarans){
-            $kelas = Kelas::with(['waliKelas','pendamping','tahunAjaran'])->whereTahunAjaranId($tahunAjarans->id)->get();
+        $tahunAjarans = TahunAjaran::orderBy('id', 'desc')->first();
+        
+        if ($tahunAjarans) {
+            $kelas = Kelas::with(['waliKelas', 'pendamping', 'tahunAjaran'])->whereTahunAjaranId($tahunAjarans->id)->get();
             $gurus = Guru::all();
         } else {
-            return redirect()
-                ->route('tahun_ajaran.index');
+            return redirect()->route('tahun_ajaran.index');
         }
         
-        return view('admin.kelas.index', compact('kelas','gurus','tahunAjarans'));
+        return view('admin.kelas.index', compact('kelas', 'gurus', 'tahunAjarans'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.kelas.index');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(KelasRequest $request)
     {
         Kelas::firstOrCreate($request->validated());
@@ -48,40 +39,86 @@ class KelasController extends Controller
             ->with('success', 'Kelas berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Kelas $kelas)
+    public function show(string $id)
     {
-        //
+        return view('kelas.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Kelas $kelas)
+    public function edit(string $id)
     {
-        return view('admin.kelas.edit');
+        return view('admin.kelas.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(KelasRequest $request, Kelas $kelas)
     {
         $kelas->update($request->validated());
 
         return redirect()
             ->route('kelas.index')
-            ->with('success', 'Kelas berhasil diperbarui.');
+            ->with('success', 'Kelas berhasil diupdate.');
     }
 
     public function destroy(Kelas $kelas)
     {
         $kelas->delete();
-
+        
         return redirect()
             ->route('kelas.index')
-            ->with('success', 'Kelas berhasil dihapus.');
+            ->with('success', 'Kelas Berhasil Dihapus!');
+    }
+
+    public function duplicateFromPreviousSemester()
+    {
+        $semesters = TahunAjaran::orderBy('id', 'desc')->take(2)->get();
+
+        if ($semesters->count() < 2) {
+            return redirect()->route('kelas.index')
+                ->with('error', 'Minimal harus ada 2 data semester (Tahun Ajaran) di sistem untuk melakukan penyalinan.');
+        }
+
+        $semesterBaru = $semesters[0];
+        $semesterLama = $semesters[1];
+
+        $kelasSudahAda = Kelas::where('tahun_ajaran_id', $semesterBaru->id)->exists();
+        if ($kelasSudahAda) {
+            return redirect()->route('kelas.index')
+                ->with('warning', 'Gagal menyalin. Data kelas untuk semester saat ini sudah ada.');
+        }
+
+        $kelasLama = Kelas::where('tahun_ajaran_id', $semesterLama->id)->get();
+
+        if ($kelasLama->isEmpty()) {
+            return redirect()->route('kelas.index')
+                ->with('warning', 'Tidak ada data kelas di semester sebelumnya untuk disalin.');
+        }
+
+        DB::transaction(function () use ($kelasLama, $semesterBaru) {
+            $dataInsert = [];
+            $now = now();
+
+            foreach ($kelasLama as $item) {
+                $dataInsert[] = [
+                    'tahun_ajaran_id' => $semesterBaru->id,
+                    'rombel'          => $item->rombel,
+                    'wali_kelas_id'   => $item->wali_kelas_id,
+                    'pendamping_id'   => $item->pendamping_id,
+                    'created_at'      => $now,
+                    'updated_at'      => $now,
+                ];
+            }
+
+            Kelas::insert($dataInsert);
+        });
+
+        return redirect()->route('kelas.index')
+            ->with('success', 'Data kelas berhasil disalin dari semester sebelumnya.');
+    }
+
+    public function importPrevious(KelasService $service)
+    {
+        $result = $service->duplicateFromPreviousSemester();
+
+        return redirect()->route('kelas.index')
+        ->with($result['status'], $result['message']);
     }
 }

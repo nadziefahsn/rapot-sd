@@ -14,9 +14,6 @@
 
 @section('content')
 
-@section('plugins.Datatables', true)
-@section('plugins.DatatablesPlugins', true)
-
 @if (session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
@@ -24,9 +21,18 @@
     <div class="card-header d-flex align-items-center w-100">
         <h3 class="card-title mb-0"><i class="fas fa-calendar-alt mr-2 me-2"></i>Kelas dan Pembimbing</h3>
         <div class="card-tools ms-auto ml-auto">
-            <button type="button" class="btn rounded-4 fw-bold" data-bs-toggle="modal" data-bs-target="#modalTambahKelas">
+            <div class="card-tools ms-auto ml-auto d-flex align-items-center">
+            <form action="{{ route('kelas.duplicate') }}" method="POST" class="d-inline m-1" onsubmit="return confirm('Apakah Anda yakin ingin menyalin kelas dari semester sebelumnya?')">
+                @csrf
+                <button type="submit" class="btn rounded-4 fw-bold" title="Salin Kelas Semester Lalu">
+                    <i class="fas fa-copy"></i> 
+                </button>
+            </form>
+            
+            <button type="button" class="btn rounded-4 fw-bold m-1" data-bs-toggle="modal" data-bs-target="#modalTambahKelas" title="Tambah Kelas">
                 <i class="fas fa-plus"></i>
             </button>
+        </div>
         </div>
     </div>
     

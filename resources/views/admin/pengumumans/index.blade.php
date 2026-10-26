@@ -108,14 +108,14 @@
 @stop
 
 @section('css')
-\<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" rel="stylesheet">
 @stop
 
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
 <script>
     $(document).ready(function () {
-\        $('#modalTambahPengumuman').on('shown.bs.modal', function () {
+        $('#modalTambahPengumuman').on('shown.bs.modal', function () {
             $('#isi_pengumuman').summernote({
                 height: 250,
                 placeholder: 'Tulis isi pengumuman...'

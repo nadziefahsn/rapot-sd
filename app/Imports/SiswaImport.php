@@ -2,12 +2,14 @@
 
 namespace App\Imports;
 
+use App\Models\Siswa;
+use App\Models\AnggotaKelas;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use App\Models\Siswa;
 
 class SiswaImport implements ToCollection
 {
+
     public function collection(Collection $collection): void
     {
         foreach ($collection as $index => $row) {
@@ -42,13 +44,17 @@ class SiswaImport implements ToCollection
                 continue;
             }
 
-            Siswa::updateOrCreate(
+            $siswa = Siswa::updateOrCreate(
                 ['nis' => $nis],
                 [
                     'nisn'       => $nisn,
                     'nama_siswa' => $nama_siswa,
                 ]
             );
+
+            AnggotaKelas::firstOrCreate([
+                'nis_id' => $siswa->nis, 
+            ]);
         }
     }
 }
