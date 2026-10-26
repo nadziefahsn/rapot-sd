@@ -19,14 +19,12 @@ class CatatanController extends Controller
         //     return redirect()->route('dashboard')->with('error', 'Tahun ajaran aktif belum ditentukan.');
         // }
 
-        // Ambil kelas sesuai tahun ajaran aktif
         $kelas = Kelas::where('tahun_ajaran_id', $tahunAjaranAktif->id)
             ->orderBy('rombel', 'asc')
             ->get();
 
         $kelasIds = $kelas->pluck('id');
 
-        // Ambil anggota kelas beserta relasinya
         $catatans = AnggotaKelas::whereIn('kelas_id', $kelasIds)
             ->with(['siswa', 'kelas', 'catatan'])
             ->get();
