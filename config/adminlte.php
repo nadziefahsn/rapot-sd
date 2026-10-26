@@ -846,6 +846,11 @@ return [
                 'url' => 'guru/kehadiran',
                 'icon' => 'fas fa-calendar-check',
             ],
+            [
+                'text' => 'Catatan Wali Kelas',
+                'icon' => 'fas fa-fw fa-sticky-note',
+                'url'  => 'guru/catatan', 
+            ],  
         ],
     ],
 ],

@@ -34,4 +34,9 @@ class AnggotaKelas extends Model
     {
         return $this->hasOne(Kehadiran::class, 'anggota_kelas_id');
     }
+
+    public function catatan()
+    {
+        return $this->hasOne(Catatan::class, 'anggota_kelas_id');
+    }
 }
