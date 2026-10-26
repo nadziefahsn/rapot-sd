@@ -40,6 +40,7 @@ return [
     'title' => 'AdminLTE 4',
     'title_prefix' => '',
     'title_postfix' => '',
+    'i18n_enabled' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -789,77 +790,29 @@ return [
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
+        ['header' => 'MENU UTAMA'],
         [
-            'text' => 'Informasi Sekolah',
-            'url' => 'admin/sekolah',
-            'icon' => 'fas fa-school',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url' => 'admin/settings',
-            'icon' => 'bi bi-person',
-        ],
-        [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'bi bi-lock',
-        ],
-        [
-            'text' => 'multilevel',
-            'icon' => 'bi bi-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
+        'text' => 'Data Master',
+        'icon' => 'fas fa-server',
+        'submenu' => [
+            [
+                'text' => ['en' => 'Dashboard', 'id' => 'Dashboard'],
+                'url' => 'admin/dashboard',
+                'icon' => 'fas fa-fw fa-tachometer-alt',
+            ],
+            [
+                'text' => 'Informasi Sekolah',
+                'url' => 'admin/sekolah',
+                'icon' => 'fas fa-school',
+            ],
+            [
+                'text' => 'Tahun Pelajaran',
+                'url' => 'admin/tahun_ajaran',
+                'icon' => 'fas fa-calendar-alt',
             ],
         ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'danger',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'warning',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'info',
-            'url' => '#',
-        ],
     ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -916,6 +869,17 @@ return [
                 ],
             ],
         ],
+
+        'FontAwesome' => [
+        'active' => true,
+        'files' => [
+            [
+                'type' => 'css',
+                'asset' => true,
+                'location' => 'vendor/fontawesome-free/css/all.min.css',
+            ],
+        ],
+    ],
         // The Datatables 'Buttons' extension, required by the 'with-buttons'
         // attribute of the datatable component. JSZip powers the excel export
         // and pdfmake the pdf one, drop them when you don't need those.

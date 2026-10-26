@@ -8,16 +8,13 @@ class Sekolah extends Model
 {
     protected $table = 'sekolahs';
 
-    protected $fillable=[
-        'nama_sekolah',
+    protected $fillable = [
         'npsn',
-        'alamat',
-        'kode',
-        'telepon',
-        'desa',
-        'kecamatan',
-        'kabupaten',
-        'provinsi',
-        'logo',
+        'nama_sekolah',
+        'kepala_sekolah',
+        'nrks',
+        'email',
+        'tahun_pelajaran',
+        'semester',
     ];
 }

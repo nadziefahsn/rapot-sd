@@ -11,7 +11,6 @@ class SekolahController extends Controller
     public function index()
     {
         $sekolah = Sekolah::first();
-
         return view('admin.sekolahs.index', compact('sekolah'));
     
     
