@@ -28,8 +28,8 @@
         <div class="card-tools ms-auto d-flex align-items-center gap-2">
             <form action="{{ route('deskripsi.duplicate') }}" method="POST" class="d-inline mb-0" onsubmit="return confirm('Apakah Anda yakin ingin menyalin deskripsi dari tengah semester sebelumnya?')">
                 @csrf
-                <button type="submit" class="btn btn-outline-secondary btn-sm rounded-pill">
-                    <i class="fas fa-copy me-1"></i> Salin Deskripsi Tengah Semester Lalu
+                <button type="submit" class="btn rounded-4 fw-bold" btn-sm">
+                    <i class="fas fa-copy"></i>
                 </button>
             </form>
 

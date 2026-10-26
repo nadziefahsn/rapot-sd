@@ -841,6 +841,11 @@ return [
                 'url' => 'admin/deskripsi',
                 'icon' => 'fas fa-clipboard-list',
             ],
+            [
+                'text' => 'Rekap Kehadiran',
+                'url' => 'guru/kehadiran',
+                'icon' => 'fas fa-calendar-check',
+            ],
         ],
     ],
 ],
