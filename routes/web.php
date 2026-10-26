@@ -8,6 +8,8 @@ use App\Http\Controllers\TahunAjaranController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\MapelController;
+use App\Http\Controllers\DeskripsiController;
 
 
 Route::get('/', function () {
@@ -32,4 +34,7 @@ Route::get('/admin/siswa/import', function () {
     return redirect()->route('siswa.index');
 });
 Route::resource('/admin/siswa', SiswaController::class)->except(['show']);
+Route::resource('/admin/mapel', MapelController::class)->except(['show']);
+Route::resource('/admin/deskripsi', DeskripsiController::class)->except(['show']);
+Route::post('admin/deskripsi/duplicate', [DeskripsiController::class, 'duplicateFromPreviousSemester'])->name('deskripsi.duplicate');
 

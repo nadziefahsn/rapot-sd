@@ -821,6 +821,16 @@ return [
                 'url' => 'admin/siswa',
                 'icon' => 'fas fa-user-graduate',
             ],
+            [
+                'text' => 'Mata Pelajaran',
+                'url' => 'admin/mapel',
+                'icon' => 'fas fa-book-open',
+            ],
+            [
+                'text' => 'Deskripsi Mapel',
+                'url' => 'admin/deskripsi',
+                'icon' => 'fas fa-clipboard-list',
+            ],
         ],
     ],
 ],
