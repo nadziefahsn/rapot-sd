@@ -29,4 +29,9 @@ class AnggotaKelas extends Model
     {
         return $this->belongsTo(TahunAjaran::class, 'tahun_ajaran_id');
     }
+
+    public function catatan()
+    {
+        return $this->hasOne(Catatan::class, 'anggota_kelas_id');
+    }
 }

@@ -841,6 +841,11 @@ return [
                 'url' => 'admin/deskripsi',
                 'icon' => 'fas fa-clipboard-list',
             ],
+            [
+                'text' => 'Catatan Wali Kelas',
+                'icon' => 'fas fa-fw fa-sticky-note',
+                'url'  => 'guru/catatan', 
+            ],  
         ],
     ],
 ],

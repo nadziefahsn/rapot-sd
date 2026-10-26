@@ -12,6 +12,7 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\AnggotaKelasController;
 use App\Http\Controllers\MapelController;
 use App\Http\Controllers\DeskripsiController;
+use App\Http\Controllers\CatatanController;
 
 
 Route::get('/', function () {
@@ -44,4 +45,5 @@ Route::resource('/admin/anggota-kelas', AnggotaKelasController::class)->paramete
 Route::resource('/admin/mapel', MapelController::class)->except(['show']);
 Route::resource('/admin/deskripsi', DeskripsiController::class)->except(['show']);
 Route::post('admin/deskripsi/duplicate', [DeskripsiController::class, 'duplicateFromPreviousSemester'])->name('deskripsi.duplicate');
+Route::resource('/guru/catatan', CatatanController::class);
 
