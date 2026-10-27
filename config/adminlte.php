@@ -792,72 +792,84 @@ return [
         ['header' => 'MENU UTAMA'],
         [
             'text' => 'Pengumuman',
-            'url' => 'admin/pengumuman',
+            'url'  => 'admin/pengumuman',
             'icon' => 'fas fa-bullhorn',
         ],
         [
-        'text' => 'Data Master',
-        'icon' => 'fas fa-server',
-        'submenu' => [
-            [
-                'text' => 'Informasi Sekolah',
-                'url' => 'admin/sekolah',
-                'icon' => 'fas fa-school',
-            ],
-            [
-                'text' => 'Tahun Pelajaran',
-                'url' => 'admin/tahun_ajaran',
-                'icon' => 'fas fa-calendar-alt',
-            ],
-            [
-                'text' => 'Guru',
-                'url' => 'admin/guru',
-                'icon' => 'fas fa-chalkboard-teacher',
-            ],
-            [
-                'text' => 'Kelas & Wali',
-                'url' => 'admin/kelas',
-                'icon' => 'fas fa-layer-group',
-            ],
-            [
-                'text' => 'Peserta Didik',
-                'url' => 'admin/siswa',
-                'icon' => 'fas fa-user-graduate',
-            ],
-            [
-                'text' => 'Anggota Kelas',
-                'url' => 'admin/anggota-kelas',
-                'icon' => 'fas fa-users',
+            'text' => 'Data Master',
+            'icon' => 'fas fa-server',
+            'can'  => 'admin',
+            'submenu' => [
+                [
+                    'text' => 'Informasi Sekolah',
+                    'url'  => 'admin/sekolah',
+                    'icon' => 'fas fa-school',
+                ],
+                [
+                    'text' => 'Tahun Pelajaran',
+                    'url'  => 'admin/tahun_ajaran',
+                    'icon' => 'fas fa-calendar-alt',
+                ],
+                [
+                    'text' => 'Guru',
+                    'url'  => 'admin/guru',
+                    'icon' => 'fas fa-chalkboard-teacher',
+                ],
+                [
+                    'text' => 'Kelas & Wali',
+                    'url'  => 'admin/kelas',
+                    'icon' => 'fas fa-layer-group',
+                ],
+                [
+                    'text' => 'Peserta Didik',
+                    'url'  => 'admin/siswa',
+                    'icon' => 'fas fa-user-graduate',
+                ],
+                [
+                    'text' => 'Anggota Kelas',
+                    'url'  => 'admin/anggota-kelas',
+                    'icon' => 'fas fa-user-graduate',
+                ],
             ],
         ],
-    ],
-    [
-        'text' => 'Penilaian',
-        'icon' => 'fas fa-file-alt',
+        [
+        'text' => 'Anggota Kelas',
+        'url'  => 'guru/anggota-kelas',
+        'icon' => 'fas fa-users',
+        'can'  => 'guru',
+        ],
+        [
+        'text'    => 'Penilaian',
+        'icon'    => 'fas fa-file-alt',
+        'can'     => ['admin', 'guru'],
         'submenu' => [
             [
                 'text' => 'Mata Pelajaran',
-                'url' => 'admin/mapel',
+                'url'  => 'admin/mapel',
                 'icon' => 'fas fa-book-open',
+                'can'  => 'admin',
             ],
             [
                 'text' => 'Deskripsi Mapel',
-                'url' => 'admin/deskripsi',
+                'url'  => 'admin/deskripsi',
                 'icon' => 'fas fa-clipboard-list',
+                'can'  => 'admin',
             ],
             [
                 'text' => 'Rekap Kehadiran',
-                'url' => 'guru/kehadiran',
+                'url'  => 'guru/kehadiran',
                 'icon' => 'fas fa-calendar-check',
+                'can'  => 'guru',
             ],
             [
                 'text' => 'Catatan Wali Kelas',
-                'url'  => 'guru/catatan', 
+                'url'  => 'guru/catatan',
                 'icon' => 'fas fa-fw fa-sticky-note',
-            ],  
+                'can'  => 'guru',
+            ],
         ],
     ],
-],
+    ],
 
     /*
     |--------------------------------------------------------------------------

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AnggotaKelas;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\User;
 use App\Models\TahunAjaran;
 use App\Http\Requests\AnggotaKelasRequest;
 use Illuminate\Http\Request;
@@ -28,19 +29,34 @@ class AnggotaKelasController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
         $tahunAjaranAktif = TahunAjaran::latest()->first();
-        if (!$tahunAjaranAktif) {
-            return redirect()->route('dashboard');
+        // if (!$tahunAjaranAktif) {
+        //     return redirect()->route('dashboard');
+        // }
+
+        if ($user->hasRole('guru')) {
+            $guruId = $user->guru?->id;
+
+            $kelasIds = Kelas::where('tahun_ajaran_id', $tahunAjaranAktif->id)
+                ->where(function ($query) use ($guruId) {
+                    $query->where('wali_kelas_id', $guruId)
+                        ->orWhere('pendamping_id', $guruId);
+                })
+                ->pluck('id');
+
+            $anggotaKelasQuery = AnggotaKelas::whereIn('kelas_id', $kelasIds)->with(['siswa', 'kelas']);
+            $kelas = Kelas::whereIn('id', $kelasIds)->orderBy('rombel', 'asc')->get();
+        } else {
+            $kelas = Kelas::whereTahunAjaranId($tahunAjaranAktif->id)->orderBy('rombel', 'asc')->get();
+            
+            $anggotaKelasQuery = AnggotaKelas::with(['siswa', 'kelas'])->where(function ($query) use ($tahunAjaranAktif) {
+                $query->whereNull('kelas_id')
+                    ->orWhereHas('kelas', function ($q) use ($tahunAjaranAktif) {
+                        $q->where('tahun_ajaran_id', $tahunAjaranAktif->id);
+                    });
+            });
         }
-
-        $kelas = Kelas::where('tahun_ajaran_id', $tahunAjaranAktif->id)->orderBy('rombel', 'asc')->get();
-
-        $anggotaKelasQuery = AnggotaKelas::with(['siswa', 'kelas'])->where(function ($query) use ($tahunAjaranAktif) {
-            $query->whereNull('kelas_id')
-                ->orWhereHas('kelas', function ($q) use ($tahunAjaranAktif) {
-                    $q->where('tahun_ajaran_id', $tahunAjaranAktif->id);
-                });
-        });
 
         $anggotaKelas = $anggotaKelasQuery->get();
         $siswas = Siswa::orderBy('nama_siswa', 'asc')->get();

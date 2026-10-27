@@ -4,9 +4,6 @@
         <div class="modal-content border-0 shadow-lg" style="border-radius: 24px;">
             <div class="modal-header border-0 pt-4 px-4">
                 <h5 class="modal-title fw-bold">Edit Anggota Kelas</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             
             <form action="{{ route('anggota-kelas.update', $item->id) }}" method="POST">

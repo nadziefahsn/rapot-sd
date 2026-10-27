@@ -16,7 +16,7 @@ class KehadiranController extends Controller
         $user = auth()->user();
         $tahunAjaran = TahunAjaran::latest()->first();
         // if (!$tahunAjaran) {
-        //     return redirect()->route('dashboard');
+        //      return redirect()->route('dashboard');
         // }
 
         if ($user) {

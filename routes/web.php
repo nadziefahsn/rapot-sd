@@ -15,37 +15,43 @@ use App\Http\Controllers\DeskripsiController;
 use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\CatatanController;
 
-
 Route::get('/', function () {
     return view('auth.login');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('/admin/sekolah', SekolahController::class)->except(['create','show','edit','destroy'])->whereNumber('sekolah');
-Route::resource('/admin/guru', GuruController::class)->except(['create','show','edit'])->whereNumber('guru');
-Route::get('/admin/guru/{id}/edit-password', [GuruController::class, 'editPassword'])->name('guru.edit-password');
-Route::put('/admin/guru/{id}/update-password', [GuruController::class, 'updatePassword'])->name('guru.update-password');
-Route::put('/admin/guru/{id}/update-user', [GuruController::class, 'updateUser'])->name('guru.update-user');
-Route::post('/admin/guru/import', [GuruController::class, 'import'])->name('guru.import');
-Route::resource('/admin/tahun_ajaran', TahunAjaranController::class);
-Route::post('/admin/kelas/duplicate', [KelasController::class, 'duplicateFromPreviousSemester'])->name('kelas.duplicate');
-Route::resource('/admin/kelas', KelasController::class)->parameters([
-    'kelas' => 'kelas'
-]);
-Route::post('/admin/siswa/import', [SiswaController::class, 'import'])->name('siswa.import');
-Route::get('/admin/siswa/import', function () {
-    return redirect()->route('siswa.index');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::resource('admin/pengumuman', PengumumanController::class);
 });
-Route::resource('/admin/siswa', SiswaController::class)->except(['show']);
-Route::resource('/admin/pengumuman', PengumumanController::class);
-Route::resource('/admin/anggota-kelas', AnggotaKelasController::class)->parameters([
-            'anggota-kelas' => 'anggotaKelas'
-        ]);
-Route::resource('/admin/mapel', MapelController::class)->except(['show']);
-Route::resource('/admin/deskripsi', DeskripsiController::class)->except(['show']);
-Route::post('admin/deskripsi/duplicate', [DeskripsiController::class, 'duplicateFromPreviousSemester'])->name('deskripsi.duplicate');
-Route::resource('/guru/kehadiran', KehadiranController::class);
-Route::resource('/guru/catatan', CatatanController::class);
 
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::resource('admin/pengumuman', PengumumanController::class);
+    Route::resource('sekolah', SekolahController::class)->except(['create','show','edit','destroy'])->whereNumber('sekolah');
+    Route::resource('tahun_ajaran', TahunAjaranController::class);
+    Route::resource('guru', GuruController::class)->except(['create','show','edit'])->whereNumber('guru');
+    Route::get('guru/{id}/edit-password', [GuruController::class, 'editPassword'])->name('guru.edit-password');
+    Route::put('guru/{id}/update-password', [GuruController::class, 'updatePassword'])->name('guru.update-password');
+    Route::put('guru/{id}/update-user', [GuruController::class, 'updateUser'])->name('guru.update-user');
+    Route::post('guru/import', [GuruController::class, 'import'])->name('guru.import');
+    Route::post('kelas/duplicate', [KelasController::class, 'duplicateFromPreviousSemester'])->name('kelas.duplicate');
+    Route::resource('kelas', KelasController::class)->parameters(['kelas' => 'kelas']);
+    Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas']);
+    Route::post('siswa/import', [SiswaController::class, 'import'])->name('siswa.import');
+    Route::get('siswa/import', function () {
+        return redirect()->route('siswa.index');
+    });
+    Route::resource('siswa', SiswaController::class)->except(['show']);
+    Route::resource('mapel', MapelController::class)->except(['show']);
+    Route::resource('deskripsi', DeskripsiController::class)->except(['show']);
+    Route::post('deskripsi/duplicate', [DeskripsiController::class, 'duplicateFromPreviousSemester'])->name('deskripsi.duplicate');
+});
+
+Route::middleware(['auth', 'role:guru|guru_t2q'])->prefix('guru')->group(function () {
+    Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas']);
+    Route::resource('kehadiran', KehadiranController::class);
+    Route::resource('catatan', CatatanController::class);
+});
+
+Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');

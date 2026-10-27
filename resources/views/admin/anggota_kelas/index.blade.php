@@ -21,9 +21,11 @@
     <div class="card-header d-flex align-items-center w-100">
         <h3 class="card-title mb-0"><i class="fas fa-calendar-alt mr-2 me-2"></i>Kelas dan Pembimbing</h3>
         <div class="card-tools ms-auto ml-auto">
+            @hasrole('admin')
             <button type="button" class="btn rounded-4 fw-bold" data-bs-toggle="modal" data-bs-target="#modalTambahAnggotaKelas">
                 <i class="fas fa-plus"></i>
             </button>
+            @endhasrole
         </div>
     </div>
 
