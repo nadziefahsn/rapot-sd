@@ -27,9 +27,9 @@
 
     <div class="card shadow-sm border-0 mb-5">
         <div class="card-header bg-white py-3 px-4">
-            <h5 class="card-title fw-bold mb-1">
-                <i class="fas fa-edit mr-2"></i> Input Catatan Umum Siswa
-            </h5>
+                <h5 class="card-title mb-1">
+                    <i class="fas fa-user-check mr-2"></i> Input Catatan Umum Siswa
+                </h5>
         </div>
 
         <div class="card-body p-4">
