@@ -14,7 +14,8 @@ use App\Http\Controllers\MapelController;
 use App\Http\Controllers\DeskripsiController;
 use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\CatatanController;
-
+use App\Http\Controllers\IntrakulikulerController;
+use App\Models\Intrakulikuler;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -48,4 +49,5 @@ Route::resource('/admin/deskripsi', DeskripsiController::class)->except(['show']
 Route::post('admin/deskripsi/duplicate', [DeskripsiController::class, 'duplicateFromPreviousSemester'])->name('deskripsi.duplicate');
 Route::resource('/guru/kehadiran', KehadiranController::class);
 Route::resource('/guru/catatan', CatatanController::class);
+Route::resource('/guru/intrakulikuler', IntrakulikulerController::class);
 

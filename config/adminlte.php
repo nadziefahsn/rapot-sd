@@ -855,6 +855,11 @@ return [
                 'url'  => 'guru/catatan', 
                 'icon' => 'fas fa-fw fa-sticky-note',
             ],  
+            [
+                'text' => 'Intrakulikuler',
+                'url'  => 'guru/intrakulikuler', 
+                'icon' => 'fas fa-fw fa-sticky-note',
+            ],  
         ],
     ],
 ],

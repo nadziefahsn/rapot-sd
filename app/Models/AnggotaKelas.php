@@ -39,4 +39,9 @@ class AnggotaKelas extends Model
     {
         return $this->hasOne(Catatan::class, 'anggota_kelas_id');
     }
+
+    public function intrakulikuler()
+    {
+        return $this->hasOne(Intrakulikuler::class, 'anggota_kelas_id');
+    }
 }
