@@ -813,13 +813,11 @@ return [
                 'text' => 'Guru',
                 'url' => 'admin/guru',
                 'icon' => 'fas fa-chalkboard-teacher',
-
             ],
             [
                 'text' => 'Kelas & Wali',
                 'url' => 'admin/kelas',
                 'icon' => 'fas fa-layer-group',
-
             ],
             [
                 'text' => 'Peserta Didik',
@@ -831,6 +829,12 @@ return [
                 'url' => 'admin/anggota-kelas',
                 'icon' => 'fas fa-users',
             ],
+        ],
+    ],
+    [
+        'text' => 'Penilaian',
+        'icon' => 'fas fa-file-alt',
+        'submenu' => [
             [
                 'text' => 'Mata Pelajaran',
                 'url' => 'admin/mapel',
@@ -848,8 +852,8 @@ return [
             ],
             [
                 'text' => 'Catatan Wali Kelas',
-                'icon' => 'fas fa-fw fa-sticky-note',
                 'url'  => 'guru/catatan', 
+                'icon' => 'fas fa-fw fa-sticky-note',
             ],  
         ],
     ],
