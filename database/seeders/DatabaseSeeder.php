@@ -26,6 +26,12 @@ class DatabaseSeeder extends Seeder
             'email'    => 'guru@gmail.com',
             'password' => Hash::make('password123'),
         ]);
+
+        $gurut2q = User::create([
+            'name'     => 'Guru T2Q Contoh',
+            'email'    => 'gurut2q@gmail.com',
+            'password' => Hash::make('password123'),
+        ]);
     }
 
 }
