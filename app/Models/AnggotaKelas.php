@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Siswa;
-use App\Models\Kelas; 
+use App\Models\Kelas;
+use App\Models\HalaqahSiswa;
 
 class AnggotaKelas extends Model
 {
@@ -38,5 +39,10 @@ class AnggotaKelas extends Model
     public function catatan()
     {
         return $this->hasOne(Catatan::class, 'anggota_kelas_id');
+    }
+
+    public function halaqah()
+    {
+        return $this->hasOne(HalaqahSiswa::class, 'anggota_kelas_id');
     }
 }

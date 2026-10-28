@@ -14,6 +14,7 @@ use App\Http\Controllers\MapelController;
 use App\Http\Controllers\DeskripsiController;
 use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\CatatanController;
+use App\Http\Controllers\GuruT2qController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -46,7 +47,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('mapel', MapelController::class)->except(['show']);
     Route::resource('deskripsi', DeskripsiController::class)->except(['show']);
     Route::post('deskripsi/duplicate', [DeskripsiController::class, 'duplicateFromPreviousSemester'])->name('deskripsi.duplicate');
-});
+    Route::resource('guru-t2q', GuruT2qController::class);
+
+    });
 
 Route::middleware(['auth', 'role:guru|guru_t2q'])->prefix('guru')->group(function () {
     Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas']);

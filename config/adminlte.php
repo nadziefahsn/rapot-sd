@@ -830,6 +830,11 @@ return [
                     'url'  => 'admin/anggota-kelas',
                     'icon' => 'fas fa-user-graduate',
                 ],
+                [
+                    'text' => 'Kelompok T2Q',
+                    'url'  => 'admin/guru-t2q',
+                    'icon' => 'fas fa-chalkboard-teacher',
+                ],
             ],
         ],
         [
