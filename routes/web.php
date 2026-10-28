@@ -14,6 +14,8 @@ use App\Http\Controllers\MapelController;
 use App\Http\Controllers\DeskripsiController;
 use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\CatatanController;
+use App\Http\Controllers\IntrakulikulerController;
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -52,6 +54,7 @@ Route::middleware(['auth', 'role:guru|guru_t2q'])->prefix('guru')->group(functio
     Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas'])->names('guru.anggota-kelas');
     Route::resource('kehadiran', KehadiranController::class);
     Route::resource('catatan', CatatanController::class);
+    Route::resource('/guru/intrakulikuler', IntrakulikulerController::class);
 });
 
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
