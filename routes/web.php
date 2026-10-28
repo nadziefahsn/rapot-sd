@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::resource('admin/pengumuman', PengumumanController::class);
+    Route::resource('pengumuman', PengumumanController::class);
     Route::resource('sekolah', SekolahController::class)->except(['create','show','edit','destroy'])->whereNumber('sekolah');
     Route::resource('tahun_ajaran', TahunAjaranController::class);
     Route::resource('guru', GuruController::class)->except(['create','show','edit'])->whereNumber('guru');
@@ -37,7 +37,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('guru/import', [GuruController::class, 'import'])->name('guru.import');
     Route::post('kelas/duplicate', [KelasController::class, 'duplicateFromPreviousSemester'])->name('kelas.duplicate');
     Route::resource('kelas', KelasController::class)->parameters(['kelas' => 'kelas']);
-    Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas']);
+    Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas'])->names('admin.anggota-kelas');
     Route::post('siswa/import', [SiswaController::class, 'import'])->name('siswa.import');
     Route::get('siswa/import', function () {
         return redirect()->route('siswa.index');
@@ -49,7 +49,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'role:guru|guru_t2q'])->prefix('guru')->group(function () {
-    Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas']);
+    Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas'])->names('guru.anggota-kelas');
     Route::resource('kehadiran', KehadiranController::class);
     Route::resource('catatan', CatatanController::class);
 });
