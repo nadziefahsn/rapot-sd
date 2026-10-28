@@ -20,8 +20,21 @@
         </div>
     @endif
 
-    <form action="{{ route('intrakulikuler.store') }}" method="POST">
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="icon fas fa-ban mr-1"></i> {{ session('error') }}
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="icon fas fa-ban mr-1"></i> Terjadi kesalahan input. Pastikan nilai berupa angka antara 0 sampai 100.
+        </div>
+    @endif
+
+    <form action="{{ route('intrakulikuler.update', 1) }}" method="POST">
         @csrf
+        @method('PUT')
 
         <div class="card shadow-sm border-0 mb-5">
             <div class="card-header bg-white py-3 px-4">
@@ -38,9 +51,14 @@
                                 <th class="text-white" style="width: 5%; background-color: #17a2b8;">No</th>
                                 <th class="text-white text-left" style="background-color: #17a2b8;">Nama Siswa</th>
                                 <th class="text-white" style="width: 15%; background-color: #17a2b8;">Kelas</th>
-                                @foreach ($deskripsis as $deskripsi)
+                                
+                                @php
+                                    $allMapels = $deskripsis->unique('mapel_id');
+                                @endphp
+
+                                @foreach ($allMapels as $deskripsiHeader)
                                     <th class="text-white" style="background-color: #17a2b8;">
-                                        {{ $deskripsi->mapel->mapel ?? '-' }}
+                                        {{ $deskripsiHeader->mapel->mapel ?? '-' }}
                                     </th>
                                 @endforeach
                             </tr>
@@ -50,21 +68,33 @@
                             <tr>
                                 <td class="text-center">{{ $index + 1 }}</td>
                                 <td>{{ $item->siswa->nama_siswa ?? '-' }}</td>
-                                <td class="text-center">{{ $item->kelas->nama_kelas ?? '-' }}</td>
-                                @foreach ($deskripsis as $deskripsi)
+                                <td class="text-center">{{ $item->kelas->rombel ?? '-' }}</td>
+                                
+                                @foreach ($allMapels as $deskripsiHeader)
                                     @php
-                                        $existingNilai = \App\Models\Intrakulikuler::where('anggota_kelas_id', $item->id)             
-                                            ->where('deskripsi_id', $deskripsi->id)             
-                                            ->first();
+                                        $matchedDeskripsi = $deskripsis->first(function ($deskripsi) use ($item, $deskripsiHeader) {
+                                            return $deskripsi->mapel_id == $deskripsiHeader->mapel_id && $deskripsi->kelas_id == $item->kelas_id;
+                                        });
+
+                                        $existingNilai = null;
+                                        if ($matchedDeskripsi && $item->intrakulikuler) {
+                                            $existingNilai = $item->intrakulikuler->firstWhere('deskripsi_id', $matchedDeskripsi->id);
+                                        }
                                     @endphp
-                                    <td>
-                                        <input type="number" name="nilai[{{ $item->id }}][{{ $deskripsi->id }}]" value="{{ $existingNilai->nilai ?? '' }}" min="0" max="100" class="form-control text-center" placeholder="0">
+                                    
+                                    <td class="text-center">
+                                        @if ($matchedDeskripsi)
+                                            <input type="number" name="nilai[{{ $item->id }}][{{ $matchedDeskripsi->id }}]" value="{{ old('nilai.' . $item->id . '.' . $matchedDeskripsi->id, $existingNilai->nilai ?? '') }}" 
+                                            min="0" max="100" class="form-control text-center" placeholder="0">
+                                        @else
+                                            <span class="text-muted small">-</span>
+                                        @endif
                                     </td>
                                 @endforeach
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="{{ count($deskripsis) + 3 }}" class="text-center py-4 text-muted">
+                                <td colspan="{{ count($allMapels) + 3 }}" class="text-center py-4 text-muted">
                                     Data anggota kelas belum tersedia.
                                 </td>
                             </tr>

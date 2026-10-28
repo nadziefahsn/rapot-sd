@@ -66,7 +66,7 @@
                                     data-bs-target="#editModal{{ $item->id }}">
                                 <i class="fa fa-lg fa-fw fa-pen"></i>
                             </button>
-                            <form action="{{ route('anggota-kelas.destroy', $item->id) }}" method="POST" class="d-inline">
+                            <form action="{{ route('admin.anggota-kelas.destroy', $item->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 

@@ -12,7 +12,7 @@ class IntrakulikulerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,8 @@ class IntrakulikulerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nilai' => 'nullable|array',
+            'nilai.*.*' => 'nullable|numeric|min:0',
         ];
     }
 }

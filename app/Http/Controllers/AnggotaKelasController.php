@@ -80,7 +80,7 @@ class AnggotaKelasController extends Controller
         AnggotaKelas::firstOrCreate($request->validated());
 
         return redirect()
-            ->route('anggota-kelas.index')
+            ->route('admin.anggota-kelas.index')
             ->with('success', 'Data siswa berhasil disimpan');
     }
 
@@ -108,7 +108,7 @@ class AnggotaKelasController extends Controller
         $anggotaKelas->update($request->validated());
 
         return redirect()
-            ->route('anggota-kelas.index')
+            ->route('admin.anggota-kelas.index')
             ->with('success', 'Data siswa berhasil diperbarui.');
     }
 
@@ -120,7 +120,7 @@ class AnggotaKelasController extends Controller
         $anggotaKelas->delete();
 
         return redirect()
-            ->route('anggota-kelas.index')
+            ->route('admin.anggota-kelas.index')
             ->with('success', 'Siswa berhasil dihapus dari anggota kelas!');
     }
 }

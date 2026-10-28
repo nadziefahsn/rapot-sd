@@ -6,7 +6,7 @@
                 <h5 class="modal-title fw-bold">Edit Anggota Kelas</h5>
             </div>
             
-            <form action="{{ route('anggota-kelas.update', $item->id) }}" method="POST">
+            <form action="{{ route('admin.anggota-kelas.update', $item->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 

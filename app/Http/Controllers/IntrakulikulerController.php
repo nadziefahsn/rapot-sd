@@ -7,7 +7,6 @@ use App\Models\Deskripsi;
 use App\Models\Intrakulikuler;
 use App\Models\TahunAjaran;
 use App\Models\Kelas;
-use App\Models\Siswa;
 use Illuminate\Http\Request;
 
 class IntrakulikulerController extends Controller
@@ -16,30 +15,36 @@ class IntrakulikulerController extends Controller
     {
         $user = auth()->user();
         $tahunAjaranAktif = TahunAjaran::latest()->first();
-        if (!$tahunAjaranAktif) {
-            return redirect()->route('dashboard');
-        }
 
-        $kelas = Kelas::where('tahun_ajaran_id', $tahunAjaranAktif->id)->orderBy('rombel', 'asc')->get();
+        // if (!$tahunAjaranAktif) {
+        //     return redirect()->route('dashboard')->with('error', 'Tahun ajaran aktif belum ditentukan.');
+        // }
 
-        $anggotaKelasQuery = AnggotaKelas::with(['siswa', 'kelas'])->where(function ($query) use ($tahunAjaranAktif) {
-            $query->whereNull('kelas_id')
-                ->orWhereHas('kelas', function ($q) use ($tahunAjaranAktif) {
-                    $q->where('tahun_ajaran_id', $tahunAjaranAktif->id);
-                });
-        });
+        $guruId = $user->guru?->id;
 
-        $anggotaKelas = $anggotaKelasQuery->get();
-        $siswas = Siswa::orderBy('nama_siswa', 'asc')->get();
+        $kelas = Kelas::where('tahun_ajaran_id', $tahunAjaranAktif->id)
+            ->where(function ($query) use ($guruId) {
+                $query->where('wali_kelas_id', $guruId)
+                    ->orWhere('pendamping_id', $guruId);
+            })
+            ->orderBy('rombel', 'asc')
+            ->get();
+
+        $kelasIds = $kelas->pluck('id');
+
+        $anggotaKelas = AnggotaKelas::whereIn('kelas_id', $kelasIds)
+            ->with(['siswa', 'kelas', 'intrakulikuler'])
+            ->get();
 
         $deskripsis = Deskripsi::with(['mapel', 'kelas'])
             ->where('tahun_ajaran_id', $tahunAjaranAktif->id)
+            ->whereIn('kelas_id', $kelasIds)
             ->whereHas('mapel', function ($query) {
                 $query->where('kategori', 'Intrakulikuler');
             })
             ->get();
 
-        return view('guru.intrakulikulers.index', compact('anggotaKelas', 'deskripsis', 'tahunAjaranAktif'));
+        return view('guru.intrakulikulers.index', compact('anggotaKelas', 'deskripsis', 'tahunAjaranAktif', 'kelas'));    
     }
 
     public function create()
@@ -92,10 +97,9 @@ class IntrakulikulerController extends Controller
             ->back()
             ->with('success', 'Data nilai intrakulikuler berhasil disimpan');
     }
-
+    
     public function destroy(Intrakulikuler $intrakulikuler)
     {
-        $intrakulikuler->delete();
-        return redirect()->back()->with('success', 'Data nilai berhasil dihapus');
+        //
     }
 }

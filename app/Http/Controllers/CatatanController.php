@@ -13,13 +13,20 @@ class CatatanController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $tahunAjaranAktif = TahunAjaran::latest()->first();
 
         // if (!$tahunAjaranAktif) {
         //     return redirect()->route('dashboard')->with('error', 'Tahun ajaran aktif belum ditentukan.');
         // }
 
+        $guruId = $user->guru?->id;
+
         $kelas = Kelas::where('tahun_ajaran_id', $tahunAjaranAktif->id)
+            ->where(function ($query) use ($guruId) {
+                $query->where('wali_kelas_id', $guruId)
+                    ->orWhere('pendamping_id', $guruId);
+            })
             ->orderBy('rombel', 'asc')
             ->get();
 
