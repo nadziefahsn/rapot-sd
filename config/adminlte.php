@@ -836,6 +836,11 @@ return [
                     'url'  => 'admin/guru-t2q',
                     'icon' => 'fas fa-chalkboard-teacher',
                 ],
+                [
+                    'text' => 'Ekstrakulikuler',
+                    'url'  => 'admin/ekstrakulikuler',
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
         [
