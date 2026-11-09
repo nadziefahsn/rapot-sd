@@ -31,7 +31,7 @@
             <thead>
                 <tr>
                     <th style="width: 5%">No</th>
-                    <th>Kelas / Rombel</th>
+                    <th>Kelas</th>
                     <th>Status Penilaian</th>
                     <th style="width: 15%" class="text-center">Aksi</th>
                 </tr>
@@ -40,7 +40,7 @@
                 @forelse($kelases as $k)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>Kelas {{ $k->rombel }}</td>
+                        <td>Kelas {{ preg_replace('/[^0-9]/', '', $k->rombel ?? $k->nama_kelas) }}</td>
                         <td>
                             @if($k->status_penilaian == 'Sudah Dinilai')
                                 <span class="badge bg-success text-white px-2 py-1">Sudah Dinilai</span>
