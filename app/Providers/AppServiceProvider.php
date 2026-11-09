@@ -30,8 +30,8 @@ class AppServiceProvider extends ServiceProvider
         return $user->hasRole('guru');
     });
 
-        Gate::define('gurut2q', function ($user) {
-        return $user->hasRole('gurut2q');
+        Gate::define('guru_t2q', function ($user) {
+        return $user->hasRole('guru_t2q');
     });
     }
 }

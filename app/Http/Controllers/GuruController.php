@@ -61,7 +61,6 @@ class GuruController extends Controller
    
     public function store(Request $request)
     {
-        
         $request->validate([
             'email'     => 'required|string|unique:users,email',
             'nama_guru' => 'required',
@@ -74,26 +73,26 @@ class GuruController extends Controller
             'nip.unique'     => 'NIP tersebut sudah digunakan oleh guru lain!',
         ]);
 
-        
         DB::transaction(function () use ($request) {
-        $user = User::create([
-            'name'     => $request->nama_guru,
-            'email'    => $request->email,
-            'password' => Hash::make('password123'),
-            'role'     => 'guru',
-        ]);
+            $isT2q = str_contains(strtolower($request->jabatan), 't2q');
+            $targetRole = $isT2q ? 'guru_t2q' : 'guru';
 
-        Guru::create([
-            'user_id'   => $user->id,
-            'nama_guru' => $request->nama_guru,
-            'jabatan'   => $request->jabatan,
-            'nip'       => $request->nip,
-        ]);
+            $user = User::create([
+                'name'     => $request->nama_guru,
+                'email'    => $request->email,
+                'password' => Hash::make('password123'),
+                'role'     => $targetRole,
+            ]);
 
-        if (method_exists($user, 'assignRole')) {
-            $user->assignRole('guru');
-        }
-    });
+            $user->assignRole($targetRole);
+
+            Guru::create([
+                'user_id'   => $user->id,
+                'nama_guru' => $request->nama_guru,
+                'jabatan'   => $request->jabatan,
+                'nip'       => $request->nip,
+            ]);
+        });
 
         return redirect()->back()->with('success', 'Data Guru berhasil disimpan!');
     }
@@ -115,7 +114,6 @@ class GuruController extends Controller
     {
         $guru = Guru::findOrFail($id);
 
-      
         $request->validate([
             'email'     => 'required|string|unique:users,email,' . ($guru->user_id ?? 0),
             'nama_guru' => 'required',
@@ -128,19 +126,26 @@ class GuruController extends Controller
             'nip.unique'     => 'NIP tersebut sudah digunakan oleh guru lain!',
         ]);
 
-        
-        if ($guru->user) {
-            $guru->user->update([
-                'email' => $request->email,
-                'name'  => $request->nama_guru,
-            ]);
-        }
+        DB::transaction(function () use ($request, $guru) {
+            $isT2q = str_contains(strtolower($request->jabatan), 't2q');
+            $targetRole = $isT2q ? 'guru_t2q' : 'guru';
 
-        $guru->update([
-            'nama_guru' => $request->nama_guru,
-            'jabatan'   => $request->jabatan,
-            'nip'       => $request->nip,
-        ]);
+            if ($guru->user) {
+                $guru->user->update([
+                    'email' => $request->email,
+                    'name'  => $request->nama_guru,
+                    'role'  => $targetRole,
+                ]);
+
+                $guru->user->syncRoles([$targetRole]);
+            }
+
+            $guru->update([
+                'nama_guru' => $request->nama_guru,
+                'jabatan'   => $request->jabatan,
+                'nip'       => $request->nip,
+            ]);
+        });
 
         return redirect()->route('guru.index')->with('success', 'Data guru berhasil diperbarui!');
     }

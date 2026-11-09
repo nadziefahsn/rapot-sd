@@ -16,6 +16,7 @@ use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\CatatanController;
 use App\Http\Controllers\IntrakulikulerController;
 use App\Http\Controllers\GuruT2qController;
+use App\Http\Controllers\CatatanT2qController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -52,11 +53,21 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     });
 
-Route::middleware(['auth', 'role:guru|guru_t2q'])->prefix('guru')->group(function () {
+Route::middleware(['auth', 'role:guru'])->prefix('guru')->group(function () {
     Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas'])->names('guru.anggota-kelas');
     Route::resource('kehadiran', KehadiranController::class);
     Route::resource('catatan', CatatanController::class);
     Route::resource('intrakulikuler', IntrakulikulerController::class);
+    });
+
+Route::middleware(['auth', 'role:guru_t2q'])->prefix('guru_t2q')->group(function () {
+    Route::resource('catatan', CatatanT2qController::class)->names([
+            'index'   => 'guru_t2q.catatan.index',
+            'store'   => 'guru_t2q.catatan.store',
+            'update'  => 'guru_t2q.catatan.update',
+            'destroy' => 'guru_t2q.catatan.destroy',
+        ]);
+
 });
 
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');

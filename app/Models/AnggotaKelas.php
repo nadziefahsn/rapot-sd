@@ -50,4 +50,9 @@ class AnggotaKelas extends Model
     {
         return $this->hasOne(HalaqahSiswa::class, 'anggota_kelas_id');
     }
+
+    public function catatanT2q()
+    {
+        return $this->hasOne(CatatanT2q::class, 'anggota_kelas_id');
+    }
 }

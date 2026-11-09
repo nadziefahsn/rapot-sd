@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -24,20 +25,29 @@ class GuruImport implements ToModel, WithHeadingRow
             return null;
         }
 
+        $jabatan = $row['jabatan'] ?? '-';
         $nipy = !empty($row['nip']) ? $row['nip'] : (!empty($row['nipy']) ? $row['nipy'] : (!empty($row['nuptk']) ? $row['nuptk'] : '-'));
 
+        $isT2q = Str::contains(strtolower($jabatan), 't2q');
+        $targetRole = $isT2q ? 'guru_t2q' : 'guru';
+
         if ($nipy !== '-') {
-            $guruAda = Guru::where('nip', $nipy)->first();
+            $guruAda = Guru::with('user')->where('nip', $nipy)->first();
             if ($guruAda) {
                 $guruAda->update([
                     'nama_guru' => $nama,
-                    'jabatan'   => $row['jabatan'] ?? $guruAda->jabatan,
+                    'jabatan'   => $jabatan !== '-' ? $jabatan : $guruAda->jabatan,
                 ]);
+
+                if ($guruAda->user) {
+                    $guruAda->user->syncRoles([$targetRole]);
+                }
+
                 return null;
             }
         }
 
-        return DB::transaction(function () use ($row, $nama, $nipy) {
+        return DB::transaction(function () use ($nama, $jabatan, $nipy, $targetRole) {
             $username = $nipy !== '-' ? $nipy : $nama;
 
             $user = User::where('email', $username)->first();
@@ -47,17 +57,18 @@ class GuruImport implements ToModel, WithHeadingRow
                     'name'     => $nama,
                     'email'    => $username,
                     'password' => Hash::make('password123'),
+                    'role'     => $targetRole,
                 ]);
 
-                if (method_exists($user, 'assignRole')) {
-                    $user->assignRole('guru');
-                }
+                $user->assignRole($targetRole);
+            } else {
+                $user->syncRoles([$targetRole]);
             }
 
             return new Guru([
                 'user_id'   => $user->id,
                 'nama_guru' => $nama,
-                'jabatan'   => $row['jabatan'] ?? '-',
+                'jabatan'   => $jabatan,
                 'nip'       => $nipy,
             ]);
         });

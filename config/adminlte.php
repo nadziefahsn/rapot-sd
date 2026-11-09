@@ -794,6 +794,7 @@ return [
             'text' => 'Pengumuman',
             'url'  => 'admin/pengumuman',
             'icon' => 'fas fa-bullhorn',
+            'can'  => 'admin',
         ],
         [
             'text' => 'Data Master',
@@ -880,6 +881,13 @@ return [
             ],  
         ],
     ],
+            [
+                'text' => 'Catatan T2Q',
+                'url'  => 'guru_t2q/catatan',
+                'icon' => 'fas fa-fw fa-sticky-note',
+                'can'  => 'guru_t2q',
+            ],
+
     ],
 
     /*
