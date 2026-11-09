@@ -882,6 +882,12 @@ return [
         ],
     ],
             [
+                'text' => 'Pelajaran Sholat',
+                'url'  => 'guru_t2q/nilai-sholat',
+                'icon' => 'fas fa-fw fa-pray',
+                'can'  => 'guru_t2q',
+            ],
+            [
                 'text' => 'Catatan T2Q',
                 'url'  => 'guru_t2q/catatan',
                 'icon' => 'fas fa-fw fa-sticky-note',
