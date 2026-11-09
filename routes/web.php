@@ -16,6 +16,7 @@ use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\CatatanController;
 use App\Http\Controllers\IntrakulikulerController;
 use App\Http\Controllers\GuruT2qController;
+use App\Http\Controllers\EkstrakulikulerController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -49,6 +50,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('deskripsi', DeskripsiController::class)->except(['show']);
     Route::post('deskripsi/duplicate', [DeskripsiController::class, 'duplicateFromPreviousSemester'])->name('deskripsi.duplicate');
     Route::resource('guru-t2q', GuruT2qController::class);
+    Route::resource('ekstrakulikuler', EkstrakulikulerController::class);
 
     });
 
