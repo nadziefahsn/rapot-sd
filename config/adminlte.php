@@ -904,6 +904,12 @@ return [
                 'icon' => 'fas fa-fw fa-sticky-note',
                 'can'  => 'guru_t2q',
             ],
+            [
+                'text' => 'Amalan Ibadah',
+                'url'  => 'guru_t2q/amalan-ibadah',
+                'icon' => 'fas fa-hands-praying',
+                'can'  => 'guru_t2q',
+            ],
 
     ],
 

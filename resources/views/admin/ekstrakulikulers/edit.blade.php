@@ -1,3 +1,4 @@
+@foreach($ekstrakulikulers as $item)
 <div class="modal fade" id="modalEditEkstrakulikuler{{ $item->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -38,3 +39,4 @@
         </div>
     </div>
 </div>
+@endforeach
