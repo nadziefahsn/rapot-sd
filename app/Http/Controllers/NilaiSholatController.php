@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NilaiSholatRequest;
 use App\Models\NilaiSholat;
+use App\Models\TahunAjaran;
 use App\Models\Mapel;
 use App\Models\Kelas;
 use App\Models\AnggotaKelas;
@@ -22,9 +23,15 @@ class NilaiSholatController extends Controller
     {
         $guruId = $this->getGuruLoginId();
 
+        $tahunAjaranAktif = TahunAjaran::latest()->first();
+
         $kelasIds = DB::table('halaqah_siswas')
             ->join('anggota_kelas', 'halaqah_siswas.anggota_kelas_id', '=', 'anggota_kelas.id')
+            ->join('kelas', 'anggota_kelas.kelas_id', '=', 'kelas.id')
             ->where('halaqah_siswas.guru_id', $guruId)
+            ->when($tahunAjaranAktif, function ($q) use ($tahunAjaranAktif) {
+                $q->where('kelas.tahun_ajaran_id', $tahunAjaranAktif->id);
+            })
             ->pluck('anggota_kelas.kelas_id')
             ->unique();
 
@@ -33,9 +40,9 @@ class NilaiSholatController extends Controller
         foreach ($kelases as $kelas) {
             $sudahDinilai = NilaiSholat::whereHas('anggotaKelas', function ($q) use ($kelas, $guruId) {
                 $q->where('kelas_id', $kelas->id)
-                  ->whereHas('halaqahSiswas', function ($hq) use ($guruId) {
-                      $hq->where('guru_id', $guruId);
-                  });
+                ->whereHas('halaqahSiswas', function ($hq) use ($guruId) {
+                    $hq->where('guru_id', $guruId);
+                });
             })->exists();
 
             $kelas->status_penilaian = $sudahDinilai ? 'Sudah Dinilai' : 'Belum Dinilai';
@@ -49,7 +56,8 @@ class NilaiSholatController extends Controller
         $guruId = $this->getGuruLoginId();
         $kelas = Kelas::findOrFail($kelasId);
 
-        $mapels = Mapel::where('kategori', 'Mulok PAI Khas Prima Insani')->get();
+        $mapels = Mapel::whereIn('ringkas', ['PWDH', 'BSHLT', 'GSHLT', 'DSHLT'])
+        ->get();
 
         $siswas = AnggotaKelas::with(['siswa', 'nilaiSholat'])
             ->where('kelas_id', $kelasId)
