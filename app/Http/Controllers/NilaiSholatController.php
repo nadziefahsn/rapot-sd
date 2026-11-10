@@ -56,7 +56,7 @@ class NilaiSholatController extends Controller
         $guruId = $this->getGuruLoginId();
         $kelas = Kelas::findOrFail($kelasId);
 
-        $mapels = Mapel::whereIn('ringkas', ['PWDH', 'BSHLT', 'GSHLT', 'DSHLT'])
+        $mapels = Mapel::whereIn('mapel', ['Praktik Wudhu', 'Bacaan Sholat', 'Gerakan Sholat', 'Dzikir Bakda Sholat'])
         ->get();
 
         $siswas = AnggotaKelas::with(['siswa', 'nilaiSholat'])

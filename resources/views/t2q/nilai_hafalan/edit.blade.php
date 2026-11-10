@@ -52,7 +52,7 @@
                                 <th rowspan="2" class="align-middle" style="width: 5%;">No</th>
                                 <th rowspan="2" class="align-middle text-start" style="min-width: 220px;">Nama Siswa</th>
                                 <th rowspan="2" class="align-middle" style="width: 10%;">Kelas</th>
-                                <th colspan="{{ $mapels->count() }}" class="align-middle">Kompetensi Dasar / Indikator Nilai Hafalan</th>
+                                <th colspan="{{ $mapels->count() }}" class="align-middle">Kompetensi Dasar</th>
                             </tr>
                             <tr>
                                 @foreach($mapels as $mp)
@@ -61,7 +61,7 @@
                                             data-bs-placement="top" 
                                             title="{{ $mp->mapel }}"
                                             style="cursor: pointer; display: inline-block; width: 100%; padding: 4px 0;">
-                                            {{ $mp->ringkas }}
+                                            {{ $mp->mapel }}
                                         </span>
                                     </th>
                                 @endforeach

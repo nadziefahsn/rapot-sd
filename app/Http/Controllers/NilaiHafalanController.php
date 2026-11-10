@@ -86,7 +86,7 @@ class NilaiHafalanController extends Controller
         $guruId = $this->getGuruLoginId();
         $kelas = Kelas::findOrFail($kelasId);
 
-        $mapels = Mapel::whereIn('ringkas', ['KH', 'DH', 'HDTS'])
+        $mapels = Mapel::whereIn('mapel', ['Kata Hikmah', 'Doa Harian', 'Hadits'])
         ->get();
 
         $siswas = AnggotaKelas::with(['siswa', 'nilaiHafalan'])

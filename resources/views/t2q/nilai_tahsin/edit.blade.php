@@ -56,7 +56,7 @@
                                 <th rowspan="2" class="align-middle" style="width: 5%;">No</th>
                                 <th rowspan="2" class="align-middle" style="width: 20%;">Nama Siswa</th>
                                 <th rowspan="2" class="align-middle" style="width: 8%;">Kelas</th>
-                                <th colspan="5" class="text-center">Tahsin</th>
+                                <th colspan="5" class="text-center">Kompetensi Dasar</th>
                             </tr>
                             <tr>
                                 <th style="width: 12%;">Jilid</th>
