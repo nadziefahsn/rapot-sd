@@ -80,4 +80,9 @@ class AnggotaKelas extends Model
     {
         return $this->hasMany(NilaiHafalan::class, 'anggota_kelas_id');
     }
+
+    public function tahfidz()
+    {
+        return $this->hasMany(Tahfidz::class, 'anggota_kelas_id');
+    }
 }

@@ -905,6 +905,12 @@ return [
                 'can'  => 'guru_t2q',
             ],
             [
+                'text' => 'Tahfidz',
+                'url'  => 'guru_t2q/nilai-tahfidz',
+                'icon' => 'fas fa-fw fa-quran',
+                'can'  => 'guru_t2q',
+            ],
+            [
                 'text' => 'Catatan T2Q',
                 'url'  => 'guru_t2q/catatan',
                 'icon' => 'fas fa-fw fa-sticky-note',

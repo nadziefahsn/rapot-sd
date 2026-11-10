@@ -22,6 +22,7 @@ use App\Http\Controllers\EkstrakulikulerController;
 use App\Http\Controllers\NilaiTahsinController;
 use App\Http\Controllers\AmalanIbadahController;
 use App\Http\Controllers\NilaiHafalanController;
+use App\Http\Controllers\TahfidzController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -75,6 +76,7 @@ Route::middleware(['auth', 'role:guru_t2q'])->prefix('guru_t2q')->group(function
         ]);
 
     Route::resource('amalan-ibadah', AmalanIbadahController::class);
+    Route::resource('nilai-tahfidz', TahfidzController::class);
 
     Route::resource('nilai-sholat', NilaiSholatController::class)
     ->parameters(['nilai-sholat' => 'kelas'])
