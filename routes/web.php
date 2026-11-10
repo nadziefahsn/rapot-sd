@@ -19,7 +19,7 @@ use App\Http\Controllers\GuruT2qController;
 use App\Http\Controllers\CatatanT2qController;
 use App\Http\Controllers\NilaiSholatController;
 use App\Http\Controllers\EkstrakulikulerController;
-
+use App\Http\Controllers\AmalanIbadahController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -76,6 +76,7 @@ Route::middleware(['auth', 'role:guru_t2q'])->prefix('guru_t2q')->group(function
     Route::get('/nilai-sholat/{kelas}/edit', [NilaiSholatController::class, 'edit'])->name('nilai_sholat.edit');
     Route::post('/nilai-sholat/{kelas}', [NilaiSholatController::class, 'store'])->name('nilai_sholat.store');
     Route::put('/nilai-sholat/{kelas}', [NilaiSholatController::class, 'update'])->name('nilai_sholat.update');
+    Route::resource('amalan-ibadah', AmalanIbadahController::class);
 
 });
 
