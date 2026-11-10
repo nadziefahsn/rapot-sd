@@ -10,11 +10,11 @@
                 <div class="modal-body p-4">
                     <div class="mb-3">
                         <label class="form-label fw-bold">Kelas <span class="text-danger">*</span></label>
-                        <select name="kelas_id" class="form-select rounded-3" required>
-                            <option value="" disabled {{ old('kelas_id') ? '' : 'selected' }}>-- Pilih Kelas --</option>
-                            @foreach($kelases as $kelas)
-                                <option value="{{ $kelas->id }}" {{ old('kelas_id') == $kelas->id ? 'selected' : '' }}>
-                                    {{ $kelas->rombel ?? $kelas->nama_kelas }}
+                        <select name="kelas_id" class="form-control" required>
+                            <option value="">-- Pilih Kelas --</option>
+                            @foreach ($kelases as $kelas)
+                                <option value="{{ $kelas->id }}">
+                                    Kelas {{ $kelas->jenjang }}
                                 </option>
                             @endforeach
                         </select>

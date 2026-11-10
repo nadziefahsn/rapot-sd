@@ -20,4 +20,10 @@ class Mapel extends Model
                     ->withPivot('id', 'deskripsi')
                     ->withTimestamps();
     }
+
+    public function deskripsis()
+    {
+        return $this->hasMany(Deskripsi::class, 'mapel_id');
+    }
+    
 }
