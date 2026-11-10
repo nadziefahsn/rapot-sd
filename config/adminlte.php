@@ -887,6 +887,12 @@ return [
         ],
     ],
             [
+                'text' => 'Hafalan',
+                'url'  => 'guru_t2q/nilai-hafalan',
+                'icon' => 'fas fa-fw fa-brain',
+                'can'  => 'guru_t2q',
+            ],
+            [
                 'text' => 'Pelajaran Sholat',
                 'url'  => 'guru_t2q/nilai-sholat',
                 'icon' => 'fas fa-fw fa-pray',

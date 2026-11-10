@@ -31,7 +31,7 @@
                                 @endforeach
                             </select>
                             <small class="form-text text-muted mt-2">
-                                * Bisa memilih lebih dari satu siswa sekaligus.
+                                * Dapat memilih lebih dari satu siswa sekaligus.
                             </small>
                         </div>
                     </div>

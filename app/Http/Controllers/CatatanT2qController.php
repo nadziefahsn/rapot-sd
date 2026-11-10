@@ -21,17 +21,13 @@ class CatatanT2qController extends Controller
 
         $tahunAjaranAktif = TahunAjaran::latest()->first();
 
-        // Cari AnggotaKelas yang terhubung ke Guru T2Q lewat relasi 'halaqah'
         $catatans = AnggotaKelas::whereHas('kelas', function ($q) use ($tahunAjaranAktif) {
                 if ($tahunAjaranAktif) {
                     $q->where('tahun_ajaran_id', $tahunAjaranAktif->id);
                 }
             })
             ->whereHas('halaqah', function ($q) use ($guruId) {
-                // Filter berdasarkan guru_id di tabel halaqah_siswas
                 $q->where('guru_id', $guruId); 
-                // Catatan: Jika di tabel halaqah_siswas nama kolomnya guru_t2q_id, 
-                // ubah 'guru_id' di atas menjadi 'guru_t2q_id'
             })
             ->with(['siswa', 'catatanT2q', 'halaqah'])
             ->get();

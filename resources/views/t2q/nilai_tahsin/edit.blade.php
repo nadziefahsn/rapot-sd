@@ -4,7 +4,7 @@
 
 @section('content_header')
 <div class="d-flex justify-content-between align-items-center">
-    <h2 class="m-0">Nilai Tahsin - Kelas {{ $kelas->rombel }}</h2>
+    <h2 class="m-0">Nilai Tahsin - Kelas {{ preg_replace('/[^0-9]/', '', $kelas->rombel) }}</h2>
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('nilai_tahsin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item active">Nilai tahsin</li>
@@ -36,8 +36,8 @@
 
         <div class="card shadow-sm border-0 mb-5">
             <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0 fw-bold text-dark">
-                    <i class="fas fa-quran me-2"></i> Form Input Nilai Tahsin Kelas {{ $kelas->rombel }}
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-quran mr-2 me-2"></i> Form Input Nilai Tahsin Kelas {{ preg_replace('/[^0-9]/', '', $kelas->rombel) }}
                 </h5>
                 <div class="ms-auto">
                     @if($sudahAdaNilai)

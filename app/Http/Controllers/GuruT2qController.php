@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Guru;
 use App\Models\AnggotaKelas;
 use App\Models\HalaqahSiswa;
+use App\Models\TahunAjaran;
 use Illuminate\Http\Request;
 
 class GuruT2qController extends Controller
@@ -14,9 +15,17 @@ class GuruT2qController extends Controller
      */
     public function index()
     {
+        $tahunAjaranAktif = TahunAjaran::latest()->first();
+
         $guruT2q = Guru::where('jabatan', 'LIKE', '%T2Q%')
-        ->withCount('siswaHalaqah')
-        ->get();
+            ->withCount(['siswaHalaqah' => function ($query) use ($tahunAjaranAktif) {
+                if ($tahunAjaranAktif) {
+                    $query->whereHas('anggotaKelas.kelas', function ($q) use ($tahunAjaranAktif) {
+                        $q->where('tahun_ajaran_id', $tahunAjaranAktif->id);
+                    });
+                }
+            }])
+            ->get();
 
         return view('admin.guru_t2q.index', compact('guruT2q'));
     }
@@ -35,20 +44,20 @@ class GuruT2qController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'guru_id'             => 'required|exists:gurus,id',
-        'anggota_kelas_ids'   => 'required|array',
-        'anggota_kelas_ids.*' => 'exists:anggota_kelas,id',
-    ]);
-
-    foreach ($request->anggota_kelas_ids as $anggotaId) {
-        HalaqahSiswa::firstOrCreate([
-            'guru_id'          => $request->guru_id,
-            'anggota_kelas_id' => $anggotaId,
+            'guru_id'             => 'required|exists:gurus,id',
+            'anggota_kelas_ids'   => 'required|array',
+            'anggota_kelas_ids.*' => 'exists:anggota_kelas,id',
         ]);
-    }
 
-    return redirect()->route('guru-t2q.show', $request->guru_id)
-        ->with('success', 'Anggota kelompok T2Q berhasil ditambahkan!');
+        foreach ($request->anggota_kelas_ids as $anggotaId) {
+            HalaqahSiswa::firstOrCreate([
+                'guru_id'          => $request->guru_id,
+                'anggota_kelas_id' => $anggotaId,
+            ]);
+        }
+
+        return redirect()->route('guru-t2q.show', $request->guru_id)
+            ->with('success', 'Anggota kelompok T2Q berhasil ditambahkan!');
     }
 
     /**
@@ -56,16 +65,34 @@ class GuruT2qController extends Controller
      */
     public function show(string $id)
     {
+        $tahunAjaranAktif = TahunAjaran::latest()->first();
+
         $guru = Guru::with([
-        'siswaHalaqah.anggotaKelas.siswa',
-        'siswaHalaqah.anggotaKelas.kelas'
+            'siswaHalaqah' => function ($query) use ($tahunAjaranAktif) {
+                if ($tahunAjaranAktif) {
+                    $query->whereHas('anggotaKelas.kelas', function ($q) use ($tahunAjaranAktif) {
+                        $q->where('tahun_ajaran_id', $tahunAjaranAktif->id);
+                    });
+                }
+            },
+            'siswaHalaqah.anggotaKelas.siswa',
+            'siswaHalaqah.anggotaKelas.kelas'
         ])->findOrFail($id);
 
-        $assignedAnggotaIds = HalaqahSiswa::pluck('anggota_kelas_id')->toArray();
+        $assignedAnggotaIds = HalaqahSiswa::whereHas('anggotaKelas.kelas', function ($q) use ($tahunAjaranAktif) {
+            if ($tahunAjaranAktif) {
+                $q->where('tahun_ajaran_id', $tahunAjaranAktif->id);
+            }
+        })->pluck('anggota_kelas_id')->toArray();
 
-        $allAnggotaKelas = AnggotaKelas::with(['siswa', 'kelas'])
-            ->whereNotIn('id', $assignedAnggotaIds)
-            ->get();
+        $allAnggotaKelas = AnggotaKelas::whereHas('kelas', function ($q) use ($tahunAjaranAktif) {
+            if ($tahunAjaranAktif) {
+                $q->where('tahun_ajaran_id', $tahunAjaranAktif->id);
+            }
+        })
+        ->with(['siswa', 'kelas'])
+        ->whereNotIn('id', $assignedAnggotaIds)
+        ->get();
 
         return view('admin.guru_t2q.show', compact('guru', 'allAnggotaKelas'));
     }
@@ -75,11 +102,24 @@ class GuruT2qController extends Controller
      */
     public function edit(string $id)
     {
+        $tahunAjaranAktif = TahunAjaran::latest()->first();
+
         $guru = Guru::findOrFail($id);
         
-        $allAnggotaKelas = AnggotaKelas::with(['siswa', 'kelas'])->get();
+        $allAnggotaKelas = AnggotaKelas::whereHas('kelas', function ($q) use ($tahunAjaranAktif) {
+            if ($tahunAjaranAktif) {
+                $q->where('tahun_ajaran_id', $tahunAjaranAktif->id);
+            }
+        })
+        ->with(['siswa', 'kelas'])
+        ->get();
         
         $assignedAnggotaIds = HalaqahSiswa::where('guru_id', $id)
+            ->whereHas('anggotaKelas.kelas', function ($q) use ($tahunAjaranAktif) {
+                if ($tahunAjaranAktif) {
+                    $q->where('tahun_ajaran_id', $tahunAjaranAktif->id);
+                }
+            })
             ->pluck('anggota_kelas_id')
             ->toArray();
 
@@ -92,7 +132,7 @@ class GuruT2qController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'anggota_kelas_ids' => 'nullable|array',
+            'anggota_kelas_ids'   => 'nullable|array',
             'anggota_kelas_ids.*' => 'exists:anggota_kelas,id',
         ]);
 
@@ -101,7 +141,7 @@ class GuruT2qController extends Controller
         if ($request->has('anggota_kelas_ids')) {
             foreach ($request->anggota_kelas_ids as $anggotaId) {
                 HalaqahSiswa::create([
-                    'guru_id' => $id,
+                    'guru_id'          => $id,
                     'anggota_kelas_id' => $anggotaId,
                 ]);
             }
