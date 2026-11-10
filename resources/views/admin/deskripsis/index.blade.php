@@ -54,8 +54,7 @@
                 @forelse($deskripsis as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->kelas?->rombel ?? $item->kelas?->nama_kelas ?? '-' }}</td>
-                        <td>{{ $item->mapel?->mapel ?? '-' }}</td>
+                        <td>{{ preg_replace('/[^0-9]/', '', $item->kelas?->rombel ?? $item->kelas?->nama_kelas) ?: '-' }}</td>                        <td>{{ $item->mapel?->mapel ?? '-' }}</td>
                         <td>{{ $item->deskripsi ?? '-' }}</td>
                         <td class="text-center">
                             <nobr>

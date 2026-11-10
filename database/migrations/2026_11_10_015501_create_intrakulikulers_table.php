@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('intrakulikulers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('anggota_kelas_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('deskripsi_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('mapel_id')->constrained('mapels')->cascadeOnDelete();
             $table->string('nilai');
             $table->timestamps();
         });

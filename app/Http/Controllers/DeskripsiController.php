@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class DeskripsiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function duplicateFromPreviousSemester()
     {
         $semesters = TahunAjaran::latest()->take(2)->get();
@@ -67,60 +64,93 @@ class DeskripsiController extends Controller
                 ->get();
         }
 
-        $kelases = Kelas::all();
+        $kelases = Kelas::all()
+            ->map(function ($kelas) {
+                $kelas->jenjang = preg_replace('/[^0-9]/', '', $kelas->rombel ?? $kelas->nama_kelas);
+                return $kelas;
+            })
+            ->unique('jenjang')
+            ->sortBy('jenjang');
         $mapels = Mapel::all();
 
         return view('admin.deskripsis.index', compact('deskripsis', 'kelases', 'mapels', 'tahunAjaranAktif'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(DeskripsiRequest $request)
     {
-        Deskripsi::firstOrCreate($request->validated());
+        $data = $request->validated();
+        
+        $kelasPilihan = Kelas::findOrFail($data['kelas_id']);
 
-        return redirect()->back()->with('success', 'Deskripsi mata pelajaran berhasil ditambahkan!');
+        $jenjang = preg_replace('/[^0-9]/', '', $kelasPilihan->rombel);
+
+        $semuaKelasSejenjang = Kelas::where('tahun_ajaran_id', $kelasPilihan->tahun_ajaran_id)
+            ->where('rombel', 'LIKE', $jenjang . '%')
+            ->get();
+
+        DB::transaction(function () use ($semuaKelasSejenjang, $data) {
+            foreach ($semuaKelasSejenjang as $k) {
+                Deskripsi::updateOrCreate(
+                    [
+                        'tahun_ajaran_id' => $data['tahun_ajaran_id'] ?? $k->tahun_ajaran_id,
+                        'kelas_id'        => $k->id,
+                        'mapel_id'        => $data['mapel_id'],
+                    ],
+                    [
+                        'deskripsi'       => $data['deskripsi'],
+                    ]
+                );
+            }
+        });
+
+        return redirect()->back()->with('success', 'Deskripsi mata pelajaran berhasil disimpan untuk seluruh kelas jenjang ' . $jenjang . '!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(DeskripsiRequest $request, string $id)
     {
-        $deskripsi = Deskripsi::findOrFail($id);
-        $deskripsi->update($request->validated());
+        $data = $request->validated();
+        $deskripsiUtama = Deskripsi::findOrFail($id);
 
-        return redirect()->back()->with('success', 'Deskripsi mata pelajaran berhasil diperbarui!');
+        $kelasPilihan = Kelas::findOrFail($deskripsiUtama->kelas_id);
+        $jenjang = preg_replace('/[^0-9]/', '', $kelasPilihan->rombel);
+
+        $semuaKelasSejenjang = Kelas::where('tahun_ajaran_id', $kelasPilihan->tahun_ajaran_id)
+            ->where('rombel', 'LIKE', $jenjang . '%')
+            ->get();
+
+        DB::transaction(function () use ($semuaKelasSejenjang, $data) {
+            foreach ($semuaKelasSejenjang as $k) {
+                Deskripsi::updateOrCreate(
+                    [
+                        'tahun_ajaran_id' => $data['tahun_ajaran_id'] ?? $k->tahun_ajaran_id,
+                        'kelas_id'        => $k->id,
+                        'mapel_id'        => $data['mapel_id'],
+                    ],
+                    [
+                        'deskripsi'       => $data['deskripsi'],
+                    ]
+                );
+            }
+        });
+
+        return redirect()->back()->with('success', 'Deskripsi mata pelajaran berhasil diperbarui untuk seluruh kelas jenjang ' . $jenjang . '!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $deskripsi = Deskripsi::findOrFail($id);
