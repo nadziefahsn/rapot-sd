@@ -11,6 +11,7 @@ class Tahfidz extends Model
         'surah',
         'kekurangan',
         'kelebihan',
+        'nilai'
     ];
 
     protected $casts = [

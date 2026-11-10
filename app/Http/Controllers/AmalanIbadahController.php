@@ -24,11 +24,15 @@ class AmalanIbadahController extends Controller
         $guruId = $this->getGuruLoginId();
 
         $tahunAjaranAktif = TahunAjaran::latest()->first();
+        $tahunAjaranId = $tahunAjaranAktif ? $tahunAjaranAktif->id : null;
 
         $namaKelasList = DB::table('halaqah_siswas')
             ->join('anggota_kelas', 'halaqah_siswas.anggota_kelas_id', '=', 'anggota_kelas.id')
             ->join('kelas', 'anggota_kelas.kelas_id', '=', 'kelas.id')
             ->where('halaqah_siswas.guru_id', $guruId)
+            ->when($tahunAjaranId, function ($q) use ($tahunAjaranId) {
+                $q->where('kelas.tahun_ajaran_id', $tahunAjaranId);
+            })
             ->pluck('kelas.rombel');
 
         $tingkatList = $namaKelasList->map(function ($namaKelas) {
@@ -37,7 +41,10 @@ class AmalanIbadahController extends Controller
 
         $dataTingkat = [];
         foreach ($tingkatList as $tingkat) {
-            $sudahDinilai = AmalanIbadah::whereHas('anggotaKelas.kelas', function ($q) use ($tingkat) {
+            $sudahDinilai = AmalanIbadah::whereHas('anggotaKelas.kelas', function ($q) use ($tingkat, $tahunAjaranId) {
+                if ($tahunAjaranId) {
+                    $q->where('tahun_ajaran_id', $tahunAjaranId);
+                }
                 $q->where('rombel', 'like', "{$tingkat}%");
             })->whereHas('anggotaKelas.halaqahSiswas', function ($hq) use ($guruId) {
                 $hq->where('guru_id', $guruId);
@@ -56,10 +63,16 @@ class AmalanIbadahController extends Controller
     {
         $guruId = $this->getGuruLoginId();
 
+        $tahunAjaranAktif = TahunAjaran::latest()->first();
+        $tahunAjaranId = $tahunAjaranAktif ? $tahunAjaranAktif->id : null;
+
         $mapels = Mapel::where('kategori', 'Amal Ibadah')->get();
 
         $siswas = AnggotaKelas::with(['siswa', 'kelas', 'amalanIbadahs'])
-            ->whereHas('kelas', function ($q) use ($tingkat) {
+            ->whereHas('kelas', function ($q) use ($tingkat, $tahunAjaranId) {
+                if ($tahunAjaranId) {
+                    $q->where('tahun_ajaran_id', $tahunAjaranId);
+                }
                 $q->where('rombel', 'like', "{$tingkat}%");
             })
             ->whereHas('halaqahSiswas', function ($q) use ($guruId) {
@@ -67,7 +80,10 @@ class AmalanIbadahController extends Controller
             })
             ->get();
 
-        $sudahAdaNilai = AmalanIbadah::whereHas('anggotaKelas.kelas', function ($q) use ($tingkat) {
+        $sudahAdaNilai = AmalanIbadah::whereHas('anggotaKelas.kelas', function ($q) use ($tingkat, $tahunAjaranId) {
+            if ($tahunAjaranId) {
+                $q->where('tahun_ajaran_id', $tahunAjaranId);
+            }
             $q->where('rombel', 'like', "{$tingkat}%");
         })->whereHas('anggotaKelas.halaqahSiswas', function ($hq) use ($guruId) {
             $hq->where('guru_id', $guruId);
