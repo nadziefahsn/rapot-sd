@@ -23,7 +23,7 @@ use App\Http\Controllers\NilaiTahsinController;
 use App\Http\Controllers\AmalanIbadahController;
 use App\Http\Controllers\NilaiHafalanController;
 use App\Http\Controllers\TahfidzController;
-use App\Models\Tahfidz;
+use App\Http\Controllers\NilaiEkstrakulikulerController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -58,23 +58,22 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('deskripsi/duplicate', [DeskripsiController::class, 'duplicateFromPreviousSemester'])->name('deskripsi.duplicate');
     Route::resource('guru-t2q', GuruT2qController::class);
     Route::resource('ekstrakulikuler', EkstrakulikulerController::class);
-
-    });
+});
 
 Route::middleware(['auth', 'role:guru'])->prefix('guru')->group(function () {
     Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas'])->names('guru.anggota-kelas');
     Route::resource('kehadiran', KehadiranController::class);
     Route::resource('catatan', CatatanController::class);
     Route::resource('intrakulikuler', IntrakulikulerController::class);
-    });
+});
 
 Route::middleware(['auth', 'role:guru_t2q'])->prefix('guru_t2q')->group(function () {
     Route::resource('catatan', CatatanT2qController::class)->names([
-            'index'   => 'guru_t2q.catatan.index',
-            'store'   => 'guru_t2q.catatan.store',
-            'update'  => 'guru_t2q.catatan.update',
-            'destroy' => 'guru_t2q.catatan.destroy',
-        ]);
+        'index'   => 'guru_t2q.catatan.index',
+        'store'   => 'guru_t2q.catatan.store',
+        'update'  => 'guru_t2q.catatan.update',
+        'destroy' => 'guru_t2q.catatan.destroy',
+    ]);
 
     Route::resource('amalan-ibadah', AmalanIbadahController::class);
 
@@ -93,7 +92,13 @@ Route::middleware(['auth', 'role:guru_t2q'])->prefix('guru_t2q')->group(function
     Route::resource('nilai-hafalan', NilaiHafalanController::class)
     ->parameters(['nilai-hafalan' => 'kelas'])
     ->names('nilai_hafalan');
+});
 
+Route::middleware(['auth', 'role:guru|guru_t2q'])->group(function () {
+    Route::resource('nilai-eskul', NilaiEkstrakulikulerController::class)
+    ->parameters(['nilai-eskul' => 'kelas'])
+    ->names('nilai-eskul')
+    ->only(['index', 'edit', 'store', 'update']);
 });
 
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');

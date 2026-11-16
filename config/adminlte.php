@@ -916,13 +916,25 @@ return [
                 'icon' => 'fas fa-hands-praying',
                 'can'  => 'guru_t2q',
             ],
+
             [
                 'text' => 'Catatan T2Q',
                 'url'  => 'guru_t2q/catatan',
                 'icon' => 'fas fa-fw fa-sticky-note',
                 'can'  => 'guru_t2q',
             ],
-
+        [
+            'text' => 'Penilaian Ekstrakulikuler',
+            'icon' => 'fas fa-book-reader',
+            'can'  => ['guru_t2q', 'guru'],
+            'submenu' => [
+                [
+                    'text'  => 'Pilihan',
+                    'route' => 'nilai-eskul.index',
+                    'icon'  => 'fas fa-check-square',
+                ],
+            ],
+        ],
     ],
 
     /*
