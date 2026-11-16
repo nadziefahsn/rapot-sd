@@ -19,50 +19,49 @@
     </div>
 @endif
 
-<div class="card shadow-sm">
-    <div class="card-header">
+<div class="card">
+    <div class="card-header d-flex align-items-center w-100">
         <h3 class="card-title mb-0">
             <i class="fas fa-list mr-2 me-2"></i>Daftar Tingkat Kelas Nilai Amalan Ibadah
         </h3>
     </div>
-    
+        
     <div class="card-body p-3">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped table-hover align-middle text-sm w-100">
-                <thead>
+        <table id="tableAmalanIbadah" class="table table-bordered table-striped table-hover text-sm w-100">
+            <thead>
+                <tr>
+                    <th style="width: 5%">No</th>
+                    <th>Tingkat Kelas</th>
+                    <th>Status Penilaian</th>
+                    <th style="width: 15%" class="text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($dataTingkat as $item)
                     <tr>
-                        <th style="width: 5%" class="text-center">No</th>
-                        <th>Tingkat Kelas</th>
-                        <th>Status Penilaian</th>
-                        <th style="width: 10%" class="text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($dataTingkat as $item)
-                        <tr>
-                            <td class="text-center">{{ $loop->iteration }}</td>
-                            <td>Tingkat {{ $item->tingkat }}</td>
-                            <td>
-                                @if($item->status_penilaian == 'Sudah Dinilai')
-                                    <span class="badge bg-success">Sudah Dinilai</span>
-                                @else
-                                    <span class="badge bg-danger">Belum Dinilai</span>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                <a href="{{ route('amalan-ibadah.edit', $item->tingkat) }}" class="btn btn-primary btn-sm rounded-3" title="Kelola Penilaian">
-                                    <i class="fas fa-plus"></i>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>Tingkat {{ $item->tingkat }}</td>
+                        <td>
+                            @if($item->status_penilaian == 'Sudah Dinilai')
+                                <span class="badge bg-success text-white px-2 py-1">Sudah Dinilai</span>
+                            @else
+                                <span class="badge bg-secondary text-white px-2 py-1">Belum Dinilai</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            <nobr>
+                                <a href="{{ route('amalan-ibadah.edit', $item->tingkat) }}" 
+                                   class="btn btn-xs btn-default text-primary mx-1 shadow" 
+                                   title="Kelola Penilaian">
+                                    <i class="fa fa-lg fa-fw fa-plus"></i>
                                 </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="text-center">Belum ada data tingkat kelas untuk kelompok T2Q Anda.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                            </nobr>
+                        </td>
+                    </tr>
+                @empty
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 @stop
@@ -77,4 +76,17 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#tableAmalanIbadah').DataTable({
+                "ordering": true,
+                "searching": true,
+                "lengthChange": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": 3 }
+                ]
+            });
+        });
+    </script>
 @stop
