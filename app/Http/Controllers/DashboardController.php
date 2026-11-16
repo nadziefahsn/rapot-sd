@@ -3,25 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Sekolah; // Pastikan model ini ada
+use App\Models\Rombel;
+use App\Models\Siswa;
+use App\Models\Guru;
+use App\Models\RuangKelas;
+use App\Models\Sekolah;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Mengambil data pertama dari tabel sekolah di database
-        $sekolahData = Sekolah::first();
+        // Mengambil jumlah data dari database dengan aman
+        $totalRombel = class_exists(Rombel::class) ? Rombel::count() : 0;
+        $totalSiswa  = class_exists(Siswa::class) ? Siswa::count() : 0;
+        $totalGuru   = class_exists(Guru::class) ? Guru::count() : 0;
+        $totalRuang  = class_exists(RuangKelas::class) ? RuangKelas::count() : 0;
 
-        return view('dashboard', [
-            'rombel'         => $sekolahData->rombel ?? 0,
-            'peserta_didik'  => $sekolahData->peserta_didik ?? 0,
-            'guru_tendik'    => $sekolahData->guru_tendik ?? 0,
-            'ruang_kelas'    => $sekolahData->ruang_kelas ?? 0,
-            'npsn'           => $sekolahData->npsn ?? '-',
-            'sekolah'        => $sekolahData->nama_sekolah ?? 'SD GIS PRIMA INSANI',
-            'kepsek'         => $sekolahData->kepala_sekolah ?? '-',
-            'nrks'           => $sekolahData->nrks ?? '-',
-            'email'          => $sekolahData->email ?? '-',
-        ]);
+        // Mengambil data informasi sekolah pertama dari database
+        $sekolah = class_exists(Sekolah::class) ? Sekolah::first() : null;
+
+        return view('admin.dashboard', compact(
+            'totalRombel', 
+            'totalSiswa', 
+            'totalGuru', 
+            'totalRuang', 
+            'sekolah'
+        ));
     }
 }

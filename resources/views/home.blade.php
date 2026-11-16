@@ -3,133 +3,127 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <h1 class="m-0 text-dark">Dashboard</h1>
 @stop
 
 @section('content')
-<div class="container-fluid">
+    <!-- CSS Paksa Berjajar 4 Kolom -->
+    <style>
+        .kotak-statistik-wrapper {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 15px !important;
+            width: 100% !important;
+            margin-bottom: 20px !important;
+        }
+        @media (max-width: 768px) {
+            .kotak-statistik-wrapper {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+    </style>
 
-    {{-- Banner Selamat Datang / Nama Sekolah --}}
-    <div class="card border-0 border-start border-4 border-success shadow-sm mb-4">
+    <!-- Banner Sekolah -->
+    <div class="card card-outline card-success mb-4">
         <div class="card-body">
-            <h4 class="fw-bold mb-1">{{ $sekolah->nama_sekolah ?? 'SD GIS PRIMA INSANI' }}</h4>
+            <h3 class="font-weight-bold">SD GIS PRIMA INSANI</h3>
             <p class="text-muted mb-0">Tahun Pelajaran 2025/2026 Semester Genap</p>
         </div>
     </div>
 
-    {{-- 4 Widget Angka Statistik --}}
-    <div class="row g-3 mb-4">
-        {{-- Card 1: Rombel --}}
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>0</h3>
-                    <p>Rombel</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-layer-group"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+    <!-- 4 Kotak Statistik Ke Samping -->
+    <div class="kotak-statistik-wrapper">
+        
+        <!-- Rombel -->
+        <div class="small-box bg-info mb-0">
+            <div class="inner">
+                <h3>{{ $rombel ?? 17 }}</h3>
+                <p>Rombel</p>
             </div>
+            <div class="icon">
+                <i class="fas fa-layer-group"></i>
+            </div>
+            <a href="{{ url('/admin/sekolah') }}" class="small-box-footer">
+                Informasi selengkapnya <i class="fas fa-arrow-circle-right"></i>
+            </a>
         </div>
 
-        {{-- Card 2: Peserta Didik --}}
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3>0</h3>
-                    <p>Peserta Didik</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <!-- Peserta Didik -->
+        <div class="small-box bg-success mb-0">
+            <div class="inner">
+                <h3>{{ $peserta_didik ?? 466 }}</h3>
+                <p>Peserta Didik</p>
             </div>
+            <div class="icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <a href="{{ url('/admin/sekolah') }}" class="small-box-footer">
+                Informasi selengkapnya <i class="fas fa-arrow-circle-right"></i>
+            </a>
         </div>
 
-        {{-- Card 3: Guru dan Tendik --}}
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="small-box bg-warning">
-                <div class="inner">
-                    <h3>0</h3>
-                    <p>Guru dan Tendik</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-user-tie"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <!-- Guru dan Tendik -->
+        <div class="small-box bg-warning mb-0">
+            <div class="inner">
+                <h3>{{ $guru_tendik ?? 79 }}</h3>
+                <p>Guru dan Tendik</p>
             </div>
+            <div class="icon">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <a href="{{ url('/admin/sekolah') }}" class="small-box-footer text-dark">
+                Informasi selengkapnya <i class="fas fa-arrow-circle-right"></i>
+            </a>
         </div>
 
-        {{-- Card 4: Ruang Kelas --}}
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3>0</h3>
-                    <p>Ruang Kelas</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-school"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <!-- Ruang Kelas -->
+        <div class="small-box bg-danger mb-0">
+            <div class="inner">
+                <h3>{{ $ruang_kelas ?? 17 }}</h3>
+                <p>Ruang Kelas</p>
             </div>
+            <div class="icon">
+                <i class="fas fa-building"></i>
+            </div>
+            <a href="{{ url('/admin/sekolah') }}" class="small-box-footer">
+                Informasi selengkapnya <i class="fas fa-arrow-circle-right"></i>
+            </a>
         </div>
+
     </div>
 
-    {{-- Section Bawah: Placeholder Pengumuman & Informasi Sekolah --}}
-    <div class="row">
-        
-        {{-- Kolom Kiri: Pengumuman (Tempat Kosong) --}}
-        <div class="col-lg-7">
-            <div class="card card-success card-outline">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-bullhorn mr-1"></i> Pengumuman
-                    </h3>
-                </div>
-                <div class="card-body text-center text-muted py-5" style="min-height: 200px;">
-                    <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
-                    <span>Belum ada pengumuman terbaru</span>
-                </div>
-            </div>
-        </div>
-
-        {{-- Kolom Kanan: Informasi Sekolah Dinamis --}}
-        <div class="col-lg-5">
-            <div class="card card-info card-outline">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-building mr-1"></i> Informasi Sekolah
-                    </h3>
+    <!-- Informasi Sekolah -->
+    <div class="row mt-3">
+        <div class="col-lg-6 col-12">
+            <div class="card card-teal card-outline p-0">
+                <div class="card-header bg-info text-white">
+                    <h3 class="card-title"><i class="fas fa-university mr-2"></i> Informasi Sekolah</h3>
                 </div>
                 <div class="card-body p-0">
-                    <table class="table table-striped">
+                    <table class="table table-striped mb-0">
                         <tr>
-                            <td class="font-weight-bold" style="width: 140px;">NPSN</td>
-                            <td>: {{ $sekolah->npsn ?? '-' }}</td>
+                            <th style="width: 35%;">NPSN</th>
+                            <td>: {{ $npsn ?? '69956855' }}</td>
                         </tr>
                         <tr>
-                            <td class="font-weight-bold">Sekolah</td>
-                            <td>: {{ $sekolah->nama_sekolah ?? '-' }}</td>
+                            <th>Sekolah</th>
+                            <td>: {{ $sekolah ?? 'SD GIS PRIMA INSANI' }}</td>
                         </tr>
                         <tr>
-                            <td class="font-weight-bold">Alamat</td>
-                            <td>: {{ $sekolah->alamat ?? '-' }}</td>
+                            <th>Kepala Sekolah</th>
+                            <td>: {{ $kepsek ?? 'PUJI FAUZIAH, S.Pd.SD.' }}</td>
                         </tr>
                         <tr>
-                            <td class="font-weight-bold">Telepon</td>
-                            <td>: {{ $sekolah->telepon ?? '-' }}</td>
+                            <th>NRKS</th>
+                            <td>: {{ $nrks ?? '19023L1040211212119042' }}</td>
                         </tr>
                         <tr>
-                            <td class="font-weight-bold">Kecamatan</td>
-                            <td>: {{ $sekolah->kecamatan ?? '-' }}</td>
+                            <th>Email</th>
+                            <td>: <span class="text-primary">{{ $email ?? 'gis@primainsani.sch.id' }}</span></td>
                         </tr>
                     </table>
                 </div>
             </div>
         </div>
-
     </div>
-
-</div>
 @stop

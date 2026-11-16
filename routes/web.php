@@ -1,26 +1,20 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-
-use App\Http\Controllers\SekolahController;
-use App\Http\Controllers\TahunAjaranController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 
-// Halaman utama
+// 1. Rute Halaman Login (GET untuk tampilkan form, POST untuk proses data)
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+
+// 2. Redirect halaman utama langsung ke /login
 Route::get('/', function () {
-    return redirect('/admin/sekolah');
+    return redirect('/login');
 });
 
-// Autentikasi bawaan
-Auth::routes();
-
-// Route Dashboard utama yang mengarah ke Controller
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
-
-// Route tambahan untuk AdminLTE (supaya tidak 404 jika manggil /admin/dashboard)
-Route::get('/admin/dashboard', [DashboardController::class, 'index']);
-
-// Route untuk Admin (Sekolah & Tahun Ajaran)
-Route::resource('/admin/sekolah', SekolahController::class)->except(['create','show','edit','destroy']);
-Route::resource('/admin/tahun_ajaran', TahunAjaranController::class);
+// 3. Rute yang butuh Login (Auth)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
