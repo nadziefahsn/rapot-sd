@@ -28,4 +28,14 @@ class Ekstrakulikuler extends Model
     {
         return $this->hasMany(EkstrakulikulerSiswa::class, 'ekstrakulikuler_id');
     }
+
+    public function ekstrakulikulerSiswas()
+    {
+        return $this->hasMany(EkstrakulikulerSiswa::class, 'ekstrakulikuler_id');
+    }
+
+    public function guru()
+    {
+        return $this->belongsTo(User::class, 'user_id'); 
+    }
 }
