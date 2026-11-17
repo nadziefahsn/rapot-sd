@@ -6,6 +6,8 @@ use App\Models\TahunAjaran;
 use App\Models\AnggotaKelas;
 use App\Models\Catatan;
 use App\Models\Kehadiran;
+use App\Models\Kelas;
+use App\Models\Deskripsi;
 use App\Models\Mapel;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -58,23 +60,66 @@ class PdfController extends Controller
         $kehadirans = Kehadiran::all();
         $tahunAjarans = TahunAjaran::all();
         $catatan = Catatan::all();
-        $mapelAmalanIbadah = Mapel::where('kategori', 'Amal Ibadah')->get();
+        $tahunAjaranAktif = TahunAjaran::latest()->first();
 
         $anggotaKelas = AnggotaKelas::with([
             'siswa', 
             'kelas.waliKelas',
+            'intrakulikuler.mapel',
             'kehadiran',
             'catatan',
             'amalanIbadahs'
         ])->findOrFail($decryptedId);
 
+        $jenjang = preg_replace('/[^0-9]/', '', $anggotaKelas->kelas->rombel ?? '');
+        $kelasSejenjangIds = Kelas::where('rombel', 'LIKE', '%' . $jenjang . '%')
+            ->pluck('id');
+
+        $listIntra = $anggotaKelas->intrakulikuler instanceof \Illuminate\Database\Eloquent\Collection
+            ? $anggotaKelas->intrakulikuler
+            : ($anggotaKelas->intrakulikuler ? collect([$anggotaKelas->intrakulikuler]) : collect());
+
+        $mapelIdsTerisi = $listIntra->whereNotNull('nilai')->pluck('mapel_id');
+
+        $mapelIntrakulikuler = Mapel::where('kategori', 'Intrakulikuler')
+            ->whereIn('id', $mapelIdsTerisi)
+            ->get();
+
+        $mapelAmalanIbadah = Mapel::where('kategori', 'Amal Ibadah')->get();
+
+        if ($anggotaKelas->intrakulikuler) {
+            $listIntra = $anggotaKelas->intrakulikuler instanceof \Illuminate\Database\Eloquent\Collection
+                ? $anggotaKelas->intrakulikuler
+                : collect([$anggotaKelas->intrakulikuler]);
+
+            foreach ($listIntra as $intra) {
+                $dataDeskripsi = Deskripsi::where('mapel_id', $intra->mapel_id)
+                    ->whereIn('kelas_id', $kelasSejenjangIds)
+                    ->first();
+
+                $capaian = $dataDeskripsi->deskripsi ?? '-';
+
+                if (!is_numeric($intra->nilai) || $capaian === '-') {
+                    $intra->deskripsi_otomatis = '-';
+                } elseif ($intra->nilai <= 79) {
+                    $intra->deskripsi_otomatis = 'Ananda sedang berkembang dalam ' . $capaian;
+                } elseif ($intra->nilai <= 89) {
+                    $intra->deskripsi_otomatis = 'Ananda sudah berkembang sesuai harapan dalam ' . $capaian;
+                } elseif ($intra->nilai <= 100) {
+                    $intra->deskripsi_otomatis = 'Ananda sangat berkembang dalam ' . $capaian;
+                } else {
+                    $intra->deskripsi_otomatis = '-';
+                }
+            }
+        }
+
         $siswa = $anggotaKelas->siswa;
-        $tahunAjaranAktif = TahunAjaran::latest()->first();
 
         $pdf = Pdf::loadView('pdf.rapot', compact(
             'anggotaKelas',
             'siswa',
             'kehadirans',
+            'mapelIntrakulikuler',
             'catatan',
             'mapelAmalanIbadah',
             'tahunAjaranAktif'

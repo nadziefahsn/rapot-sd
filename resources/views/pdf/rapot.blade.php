@@ -19,31 +19,62 @@
 
     <table class="identitas-siswa">
         <tr>
-            <td class="label-col">Nama</td>
-            <td class="separator-col">:</td>
-            <td>{{ $anggotaKelas->siswa->nama_siswa ?? '-' }}</td>
+            <td class="label-col"><b>Nama</b></td>
+            <td class="separator-col"><b>:</b></td>
+            <td><b>{{ $anggotaKelas->siswa->nama_siswa ?? '-' }}</b></td>
         </tr>
         <tr>
-            <td>NIS</td>
-            <td>:</td>
-            <td>{{ $anggotaKelas->siswa->nis ?? '-' }}</td>
+            <td><b>NIS</b></td>
+            <td><b>:</b></td>
+            <td><b>{{ $anggotaKelas->siswa->nis ?? '-' }}</b></td>
         </tr>
         <tr>
-            <td>NISN</td>
-            <td>:</td>
-            <td>{{ $anggotaKelas->siswa->nisn ?? '-' }}</td>
+            <td><b>NISN</b></td>
+            <td><b>:</b></td>
+            <td><b>{{ $anggotaKelas->siswa->nisn ?? '-' }}</b></td>
         </tr>
         <tr>
-            <td>Kelas</td>
-            <td>:</td>
-            <td>{{ $anggotaKelas->kelas->rombel ?? '-' }}</td>
+            <td><b>Kelas</b></td>
+            <td><b>:</b></td>
+            <td><b>{{ $anggotaKelas->kelas->rombel ?? '-' }}</b></td>
         </tr>
     </table>
-    
-<div class="page-break"></div>
 
 <div class="invoice-box">
-    <div style="font-weight: bold; margin-bottom: 5px;">D. AMAL IBADAH</div>
+    <div style="font-weight: bold; margin-bottom: 5px;">A. INTRAKULIKULER</div>
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 20px;">
+        <thead>
+            <tr style="background: #ccc;">
+                <th style="width: 10%; border: 1px solid black; padding: 6px; text-align: center;">NO</th>
+                <th style="width: 45%; border: 1px solid black; padding: 6px; text-align: center;">MATA PELAJARAN</th>
+                <th style="width: 45%; border: 1px solid black; padding: 6px; text-align: center;">DESKRIPSI</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($mapelIntrakulikuler ?? [] as $index => $mapel)
+                @php
+                    $itemIntrakulikuler = $anggotaKelas?->intrakulikuler?->first(function($intra) use ($mapel) {
+                        return $intra->mapel_id == $mapel->id;
+                    });
+                    $deskripsiIntrakulikuler = $itemIntrakulikuler ? $itemIntrakulikuler->deskripsi_otomatis : '-';
+                @endphp
+                <tr>
+                    <td style="border: 1px solid black; padding: 6px; text-align: center;">{{ $index + 1 }}</td>
+                    <td style="border: 1px solid black; padding: 6px;">{{ $mapel->mapel ?? '-' }}</td>
+                    <td style="border: 1px solid black; padding: 6px; text-align: justify;">{{ $deskripsiIntrakulikuler }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3" style="border: 1px solid black; padding: 6px; text-align: center;">Belum ada data intrakulikuler.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+<div class="page-break"></div>
+
+
+<div class="invoice-box">
+    <div style="font-weight: bold; margin-bottom: 5px;">A. AMAL IBADAH</div>
     <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 20px;">
         <thead>
             <tr style="background: #ccc;">
