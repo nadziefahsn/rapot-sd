@@ -1,0 +1,191 @@
+.page-break {
+  page-break-after: always;
+}
+.invoice-box {
+  padding: 0;
+  font-size: 14px;
+  line-height: 18px;
+  font-family: 'Times New Roman', Times, serif;
+  color: #000;
+  width: 100%;
+}
+
+/* Identitas */
+.invoice-box div.header {
+  position: fixed;
+  top: 8mm;
+  right: 10mm;
+  left: 13mm;
+}
+.invoice-box div.header table td{
+  padding: 0px;
+  vertical-align: top;
+  right: 0;
+  left: 0;
+}
+/* End Identitas  */
+
+/* Footer  */
+.invoice-box div.footer {
+  position: fixed;
+  font-size: smaller;
+  padding-top: 5px;
+  border-top: 1px solid #333;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+/* End Footer  */
+
+/* Conten */
+.invoice-box div.content {
+  padding-top: 140px;
+  right: 0;
+  left: 0;
+  margin-right: -10px;
+}
+.invoice-box div.content2 {
+  padding-top: 110px;
+  right: 0;
+  left: 0;
+  margin-right: -10px;
+}
+.invoice-box div.content h3{
+  text-align: center;
+}
+.invoice-box div.content h2{
+  text-align: center;
+}
+
+.invoice-box table {
+  width: 100%;
+  line-height: inherit;
+  text-align: left;
+  font-family: 'Times New Roman', Times, serif;
+  border-collapse: collapse;
+}
+
+/* Heading */
+.invoice-box table tr.heading td {
+  background: #ffffff;
+  border: 1px solid #333;
+  font-weight: bold;
+  text-align: center;
+  height: 20px;
+}
+
+/* Sikap */
+.invoice-box table tr.sikap td {
+  border: 1px solid #333;
+  padding: 6px;
+}
+
+.invoice-box table tr.sikap td.predikat {
+  text-align: justify;
+  vertical-align: top;
+}
+
+.invoice-box table tr.sikap td.description {
+  vertical-align: top;
+  text-align: justify;
+  line-height: 20px;
+}
+/* End Sikap  */
+
+/* Nilai */
+.invoice-box table tr.nilai td {
+  border: 1px solid #333;
+  padding: 3px;
+}
+.invoice-box table tr.nilai td.center {
+  text-align: center;
+}
+.invoice-box table tr.nilai td.description {
+  text-align: justify;
+  font-size: 12px;
+}
+.invoice-box table tr.nilai td.false {
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 0;
+}
+/* End Nilai */
+
+.content {
+  text-align: center;
+}
+
+@media only screen and (max-width: 650px) {
+  .invoice-box table tr.top table td {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+
+  .invoice-box table tr.information table td {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+}
+
+/** RTL **/
+.invoice-box.rtl {
+  direction: rtl;
+  font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+}
+
+.invoice-box.rtl table {
+  text-align: right;
+}
+
+.invoice-box.rtl table tr td:nth-child(2) {
+  text-align: left;
+}
+
+body {
+    margin: 10mm 15mm; 
+    font-family: 'Times New Roman', Times, serif;
+    color: #000;
+}
+.kop-surat {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.kop-surat img {
+    width: 100%;
+    height: auto;
+}
+.garis-kop {
+    border: none;
+    border-top: 3px solid #000;
+    border-bottom: 1px solid #000;
+    height: 2px;
+    margin-bottom: 20px;
+}
+.judul-laporan {
+    text-align: center;
+    font-size: 13pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+.identitas-siswa {
+    width: 100%;
+    font-size: 11pt;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+.identitas-siswa td {
+    padding: 3px 0;
+    vertical-align: top;
+}
+.label-col {
+    width: 90px;
+}
+.separator-col {
+    width: 15px;
+    text-align: center;
+}

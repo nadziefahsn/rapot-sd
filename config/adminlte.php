@@ -29,7 +29,7 @@ return [
     ],
 
     'preloader' => [
-        'enabled' => true,
+        'enabled' => false,
         'mode' => 'fullscreen',
         'img' => [
             'path' => 'vendor/adminlte/dist/assets/img/AdminLTELogo.png',
@@ -213,6 +213,433 @@ return [
             'text' => 'Tahun Pelajaran',
             'url'  => 'admin/tahun_ajaran',
             'icon' => 'fas fa-calendar-alt',
+
+            'type' => 'fullscreen-widget',
+            'topnav_right' => true,
+        ],
+
+        // Sidebar items:
+        [
+            'type' => 'sidebar-menu-search',
+            'text' => 'search',
+        ],
+        [
+            'text' => 'blog',
+            'url' => 'admin/blog',
+            'can' => 'manage-blog',
+        ],
+        ['header' => 'MENU UTAMA'],
+        [
+            'text' => 'Pengumuman',
+            'url'  => 'admin/pengumuman',
+            'icon' => 'fas fa-bullhorn',
+            'can'  => 'admin',
+        ],
+        [
+            'text' => 'Data Master',
+            'icon' => 'fas fa-server',
+            'can'  => 'admin',
+            'submenu' => [
+                [
+                    'text' => 'Informasi Sekolah',
+                    'url'  => 'admin/sekolah',
+                    'icon' => 'fas fa-school',
+                ],
+                [
+                    'text' => 'Tahun Pelajaran',
+                    'url'  => 'admin/tahun_ajaran',
+                    'icon' => 'fas fa-calendar-alt',
+                ],
+                [
+                    'text' => 'Guru',
+                    'url'  => 'admin/guru',
+                    'icon' => 'fas fa-chalkboard-teacher',
+                ],
+                [
+                    'text' => 'Kelas & Wali',
+                    'url'  => 'admin/kelas',
+                    'icon' => 'fas fa-layer-group',
+                ],
+                [
+                    'text' => 'Peserta Didik',
+                    'url'  => 'admin/siswa',
+                    'icon' => 'fas fa-user-graduate',
+                ],
+                [
+                    'text' => 'Anggota Kelas',
+                    'url'  => 'admin/anggota-kelas',
+                    'icon' => 'fas fa-user-graduate',
+                ],
+                [
+                    'text' => 'Kelompok T2Q',
+                    'url'  => 'admin/guru-t2q',
+                    'icon' => 'fas fa-chalkboard-teacher',
+                ],
+                [
+                    'text' => 'Ekstrakulikuler',
+                    'url'  => 'admin/ekstrakulikuler',
+                    'icon' => 'fas fa-users',
+                ],
+            ],
+        ],
+        [
+        'text' => 'Anggota Kelas',
+        'url'  => 'guru/anggota-kelas',
+        'icon' => 'fas fa-users',
+        'can'  => 'guru',
+        ],
+        [
+        'text'    => 'Penilaian',
+        'icon'    => 'fas fa-file-alt',
+        'can'     => ['admin', 'guru'],
+        'submenu' => [
+            [
+                'text' => 'Mata Pelajaran',
+                'url'  => 'admin/mapel',
+                'icon' => 'fas fa-book-open',
+                'can'  => 'admin',
+            ],
+            [
+                'text' => 'Deskripsi Mapel',
+                'url'  => 'admin/deskripsi',
+                'icon' => 'fas fa-clipboard-list',
+                'can'  => 'admin',
+            ],
+            [
+                'text' => 'Rekap Kehadiran',
+                'url'  => 'guru/kehadiran',
+                'icon' => 'fas fa-calendar-check',
+                'can'  => 'guru',
+            ],
+            [
+                'text' => 'Catatan Wali Kelas',
+                'url'  => 'guru/catatan',
+                'icon' => 'fas fa-fw fa-sticky-note',
+                'can'  => 'guru',
+            ],  
+            [
+                'text' => 'Intrakulikuler',
+                'url'  => 'guru/intrakulikuler', 
+                'icon' => 'fas fa-fw fa-sticky-note',
+                'can'  => 'guru',
+            ],  
+        ],
+    ],
+            [
+                'text' => 'Hafalan',
+                'url'  => 'guru_t2q/nilai-hafalan',
+                'icon' => 'fas fa-fw fa-brain',
+                'can'  => 'guru_t2q',
+            ],
+            [
+                'text' => 'Pelajaran Sholat',
+                'url'  => 'guru_t2q/nilai-sholat',
+                'icon' => 'fas fa-fw fa-pray',
+                'can'  => 'guru_t2q',
+            ],
+            [
+                'text' => 'Tahsin',
+                'url'  => 'guru_t2q/nilai-tahsin',
+                'icon' => 'fas fa-fw fa-quran',
+                'can'  => 'guru_t2q',
+            ],
+            [
+                'text' => 'Tahfidz',
+                'url'  => 'guru_t2q/nilai-tahfidz',
+                'icon' => 'fas fa-fw fa-quran',
+                'can'  => 'guru_t2q',
+            ],
+            [
+                'text' => 'Amalan Ibadah',
+                'url'  => 'guru_t2q/amalan-ibadah',
+                'icon' => 'fas fa-hands-praying',
+                'can'  => 'guru_t2q',
+            ],
+
+            [
+                'text' => 'Catatan T2Q',
+                'url'  => 'guru_t2q/catatan',
+                'icon' => 'fas fa-fw fa-sticky-note',
+                'can'  => 'guru_t2q',
+            ],
+        [
+            'text' => 'Penilaian Ekstrakulikuler',
+            'icon' => 'fas fa-book-reader',
+            'can'  => ['guru_t2q', 'guru'],
+            'submenu' => [
+                [
+                    'text'  => 'Pilihan',
+                    'route' => 'nilai-eskul.index',
+                    'icon'  => 'fas fa-check-square',
+                ],
+            ],
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Menu Filters
+    |--------------------------------------------------------------------------
+    |
+    | Here we can modify the menu filters of the admin panel.
+    |
+    | For detailed instructions you can look the menu filters section here:
+    | https://jeroennoten.github.io/Laravel-AdminLTE/sections/configuration/menu.html
+    |
+    */
+
+    'filters' => [
+        JeroenNoten\LaravelAdminLte\Menu\Filters\GateFilter::class,
+        JeroenNoten\LaravelAdminLte\Menu\Filters\HrefFilter::class,
+        JeroenNoten\LaravelAdminLte\Menu\Filters\SearchFilter::class,
+        JeroenNoten\LaravelAdminLte\Menu\Filters\ActiveFilter::class,
+        JeroenNoten\LaravelAdminLte\Menu\Filters\ClassesFilter::class,
+        JeroenNoten\LaravelAdminLte\Menu\Filters\LangFilter::class,
+        JeroenNoten\LaravelAdminLte\Menu\Filters\DataFilter::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Plugins Initialization
+    |--------------------------------------------------------------------------
+    |
+    | Here we can modify the plugins used inside the admin panel.
+    |
+    | For detailed instructions you can look the plugins section here:
+    | https://jeroennoten.github.io/Laravel-AdminLTE/sections/configuration/plugins.html
+    |
+    */
+
+    'plugins' => [
+        'Datatables' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '//cdn.datatables.net/2.1.8/js/dataTables.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '//cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '//cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css',
+                ],
+            ],
+        ],
+
+        'FontAwesome' => [
+        'active' => true,
+        'files' => [
+            [
+                'type' => 'css',
+                'asset' => true,
+                'location' => 'vendor/fontawesome-free/css/all.min.css',
+            ],
+        ],
+    ],
+        // The Datatables 'Buttons' extension, required by the 'with-buttons'
+        // attribute of the datatable component. JSZip powers the excel export
+        // and pdfmake the pdf one, drop them when you don't need those.
+
+        'DatatablesButtons' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/buttons/4.0.2/js/dataTables.buttons.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/buttons/4.0.2/js/buttons.bootstrap5.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/buttons/4.0.2/js/buttons.html5.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/buttons/4.0.2/js/buttons.print.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.3/pdfmake.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.3/vfs_fonts.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/buttons/4.0.2/css/buttons.bootstrap5.min.css',
+                ],
+            ],
+        ],
+        'Select2' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css',
+                ],
+
+                // The AdminLTE v4 compatibility theme for Select2. Replace it
+                // by the 'adminlte-select2.rtl.min.css' file on RTL mode.
+
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/admin-lte@{version}/dist/css/adminlte-select2.min.css',
+                    'rtl' => '//cdn.jsdelivr.net/npm/admin-lte@{version}/dist/css/adminlte-select2.rtl.min.css',
+                ],
+            ],
+        ],
+        'TomSelect' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css',
+                ],
+            ],
+        ],
+        'Tabulator' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/tabulator-tables@6.3.0/dist/js/tabulator.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/tabulator-tables@6.3.0/dist/css/tabulator_bootstrap5.min.css',
+                ],
+            ],
+        ],
+        'Flatpickr' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css',
+                ],
+            ],
+        ],
+        'Quill' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css',
+                ],
+            ],
+        ],
+        'NoUiSlider' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.css',
+                ],
+            ],
+        ],
+        'Chartjs' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js',
+                ],
+            ],
+        ],
+        'Sweetalert2' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
+                ],
+            ],
+        ],
+        'Pace' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-center-radar.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js',
+                ],
+            ],
+        ],
+        'summernote' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js',
+                ],
+            ],
         ],
     ],
 
