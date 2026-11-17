@@ -79,13 +79,8 @@
                                             $selectedValue = old('nilai.' . $s->id . '.' . $mp->id, $nilaiExisting);
                                         @endphp
                                         <td class="align-middle p-2">
-                                            <select name="nilai[{{ $s->id }}][{{ $mp->id }}]" class="form-control form-control-sm text-center mx-auto">
-                                                <option value=""></option>
-                                                <option value="BSH" {{ $selectedValue == 'BSH' ? 'selected' : '' }}>BSH</option>
-                                                <option value="SAB" {{ $selectedValue == 'SAB' ? 'selected' : '' }}>SAB</option>
-                                                <option value="MB" {{ $selectedValue == 'MB' ? 'selected' : '' }}>MB</option>
-                                                <option value="SB" {{ $selectedValue == 'SB' ? 'selected' : '' }}>SB</option>
-                                            </select>
+                                            <input type="number" name="nilai[{{ $s->id }}][{{ $mp->id }}]" value="{{ $selectedValue }}" min="0" max="100"
+                                             class="form-control form-control-sm text-center mx-auto" placeholder="" />
                                         </td>
                                     @endforeach
                                 </tr>

@@ -25,7 +25,7 @@ class AmalanIbadahRequest extends FormRequest
         return [
             'nilai' => 'required|array',
             'nilai.*' => 'required|array',
-            'nilai.*.*' => 'nullable|string|max:50',
+            'nilai.*.*' => 'nullable|string|min:0|max:100',
         ];
     }
 }

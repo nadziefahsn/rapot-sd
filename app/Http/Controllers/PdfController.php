@@ -68,6 +68,35 @@ class PdfController extends Controller
             'amalanIbadahs'
         ])->findOrFail($decryptedId);
 
+        foreach ($mapelAmalanIbadah as $mapel) {
+            $itemAmalan = $anggotaKelas?->amalanIbadahs?->first(function($ai) use ($mapel) {
+                return $ai->mapel_id == $mapel->id;
+            });
+
+            $nilaiAngka = $itemAmalan ? (int) $itemAmalan->nilai : 0;
+            $namaMapelLower = strtolower($mapel->mapel ?? $mapel->nama_mapel ?? '');
+
+            if (str_contains($namaMapelLower, 'salat') || str_contains($namaMapelLower, 'sholat')) {
+                if ($nilaiAngka <= 81) {
+                    $mapel->deskripsi = "Salat 5 waktu harus dimotivasi agar menjadi kebiasaan.";
+                } elseif ($nilaiAngka <= 93) {
+                    $mapel->deskripsi = "Salat sudah mulai berkembang dan perlu peningkatan agar menjadi kebiasaan.";
+                } else {
+                    $mapel->deskripsi = "Salat sudah menjadi kebiasaan semoga selalu istiqamah dalam beribadah.";
+                }
+            } elseif (str_contains($namaMapelLower, 'tilawah')) {
+                if ($nilaiAngka <= 81) {
+                    $mapel->deskripsi = "Tilawah harus dimotivasi agar menjadi kebiasaan.";
+                } elseif ($nilaiAngka <= 93) {
+                    $mapel->deskripsi = "Tilawah sudah mulai berkembang dan perlu peningkatan agar menjadi kebiasaan.";
+                } else {
+                    $mapel->deskripsi = "Tilawah sudah menjadi kebiasaan semoga selalu istiqamah dalam beribadah.";
+                }
+            } else {
+                $mapel->deskripsi = $itemAmalan ? $itemAmalan->nilai : '-';
+            }
+        }
+
         $siswa = $anggotaKelas->siswa;
         $tahunAjaranAktif = TahunAjaran::latest()->first();
 
