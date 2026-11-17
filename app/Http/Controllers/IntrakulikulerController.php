@@ -46,8 +46,7 @@ class IntrakulikulerController extends Controller
 
         $jenjang = preg_replace('/[^0-9]/', '', $kelas->rombel);
 
-        $kelasSejenjangIds = Kelas::where('tahun_ajaran_id', $tahunAjaranAktif->id)
-            ->where('rombel', 'LIKE', $jenjang . '%')
+        $kelasSejenjangIds = Kelas::where('rombel', 'LIKE', '%' . $jenjang . '%')
             ->pluck('id');
 
         $mapels = Mapel::where('kategori', 'Intrakulikuler')

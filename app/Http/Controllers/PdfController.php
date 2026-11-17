@@ -6,6 +6,8 @@ use App\Models\TahunAjaran;
 use App\Models\AnggotaKelas;
 use App\Models\Catatan;
 use App\Models\Kehadiran;
+use App\Models\Kelas;
+use App\Models\Deskripsi;
 use App\Models\Mapel;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -58,52 +60,66 @@ class PdfController extends Controller
         $kehadirans = Kehadiran::all();
         $tahunAjarans = TahunAjaran::all();
         $catatan = Catatan::all();
-        $mapelAmalanIbadah = Mapel::where('kategori', 'Amal Ibadah')->get();
+        $tahunAjaranAktif = TahunAjaran::latest()->first();
 
         $anggotaKelas = AnggotaKelas::with([
             'siswa', 
             'kelas.waliKelas',
+            'intrakulikuler.mapel',
             'kehadiran',
             'catatan',
             'amalanIbadahs'
         ])->findOrFail($decryptedId);
 
-        foreach ($mapelAmalanIbadah as $mapel) {
-            $itemAmalan = $anggotaKelas?->amalanIbadahs?->first(function($ai) use ($mapel) {
-                return $ai->mapel_id == $mapel->id;
-            });
+        $jenjang = preg_replace('/[^0-9]/', '', $anggotaKelas->kelas->rombel ?? '');
+        $kelasSejenjangIds = Kelas::where('rombel', 'LIKE', '%' . $jenjang . '%')
+            ->pluck('id');
 
-            $nilaiAngka = $itemAmalan ? (int) $itemAmalan->nilai : 0;
-            $namaMapelLower = strtolower($mapel->mapel ?? $mapel->nama_mapel ?? '');
+        $listIntra = $anggotaKelas->intrakulikuler instanceof \Illuminate\Database\Eloquent\Collection
+            ? $anggotaKelas->intrakulikuler
+            : ($anggotaKelas->intrakulikuler ? collect([$anggotaKelas->intrakulikuler]) : collect());
 
-            if (str_contains($namaMapelLower, 'salat') || str_contains($namaMapelLower, 'sholat')) {
-                if ($nilaiAngka <= 81) {
-                    $mapel->deskripsi = "Salat 5 waktu harus dimotivasi agar menjadi kebiasaan.";
-                } elseif ($nilaiAngka <= 93) {
-                    $mapel->deskripsi = "Salat sudah mulai berkembang dan perlu peningkatan agar menjadi kebiasaan.";
+        $mapelIdsTerisi = $listIntra->whereNotNull('nilai')->pluck('mapel_id');
+
+        $mapelIntrakulikuler = Mapel::where('kategori', 'Intrakulikuler')
+            ->whereIn('id', $mapelIdsTerisi)
+            ->get();
+
+        $mapelAmalanIbadah = Mapel::where('kategori', 'Amal Ibadah')->get();
+
+        if ($anggotaKelas->intrakulikuler) {
+            $listIntra = $anggotaKelas->intrakulikuler instanceof \Illuminate\Database\Eloquent\Collection
+                ? $anggotaKelas->intrakulikuler
+                : collect([$anggotaKelas->intrakulikuler]);
+
+            foreach ($listIntra as $intra) {
+                $dataDeskripsi = Deskripsi::where('mapel_id', $intra->mapel_id)
+                    ->whereIn('kelas_id', $kelasSejenjangIds)
+                    ->first();
+
+                $capaian = $dataDeskripsi->deskripsi ?? '-';
+
+                if (!is_numeric($intra->nilai) || $capaian === '-') {
+                    $intra->deskripsi_otomatis = '-';
+                } elseif ($intra->nilai <= 79) {
+                    $intra->deskripsi_otomatis = 'Ananda sedang berkembang dalam ' . $capaian;
+                } elseif ($intra->nilai <= 89) {
+                    $intra->deskripsi_otomatis = 'Ananda sudah berkembang sesuai harapan dalam ' . $capaian;
+                } elseif ($intra->nilai <= 100) {
+                    $intra->deskripsi_otomatis = 'Ananda sangat berkembang dalam ' . $capaian;
                 } else {
-                    $mapel->deskripsi = "Salat sudah menjadi kebiasaan semoga selalu istiqamah dalam beribadah.";
+                    $intra->deskripsi_otomatis = '-';
                 }
-            } elseif (str_contains($namaMapelLower, 'tilawah')) {
-                if ($nilaiAngka <= 81) {
-                    $mapel->deskripsi = "Tilawah harus dimotivasi agar menjadi kebiasaan.";
-                } elseif ($nilaiAngka <= 93) {
-                    $mapel->deskripsi = "Tilawah sudah mulai berkembang dan perlu peningkatan agar menjadi kebiasaan.";
-                } else {
-                    $mapel->deskripsi = "Tilawah sudah menjadi kebiasaan semoga selalu istiqamah dalam beribadah.";
-                }
-            } else {
-                $mapel->deskripsi = $itemAmalan ? $itemAmalan->nilai : '-';
             }
         }
 
         $siswa = $anggotaKelas->siswa;
-        $tahunAjaranAktif = TahunAjaran::latest()->first();
 
         $pdf = Pdf::loadView('pdf.rapot', compact(
             'anggotaKelas',
             'siswa',
             'kehadirans',
+            'mapelIntrakulikuler',
             'catatan',
             'mapelAmalanIbadah',
             'tahunAjaranAktif'
