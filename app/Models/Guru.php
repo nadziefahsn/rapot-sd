@@ -8,9 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Guru extends Model
 {
-    //
-}
-
     use HasFactory;
 
     protected $guarded = [];
@@ -25,7 +22,6 @@ class Guru extends Model
         'nip',
     ];
 
-
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -36,4 +32,3 @@ class Guru extends Model
         return $this->hasMany(HalaqahSiswa::class, 'guru_id');
     }
 }
-

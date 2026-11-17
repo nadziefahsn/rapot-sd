@@ -3,10 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
-
-// 1. Rute Halaman Login (GET untuk tampilkan form, POST untuk proses data)
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\TahunAjaranController;
 use App\Http\Controllers\GuruController;
@@ -30,21 +26,15 @@ use App\Http\Controllers\TahfidzController;
 use App\Http\Controllers\NilaiEkstrakulikulerController;
 use App\Http\Controllers\PdfController;
 
-// 2. Redirect halaman utama langsung ke /login
 Route::get('/', function () {
     return redirect('/login');
-});
-
-// 3. Rute yang butuh Login (Auth)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('admin/pengumuman', PengumumanController::class);
     Route::resource('pdf', PdfController::class)->only(['show', 'index']);
 });

@@ -4,10 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Siswa extends Model
-{
-    //
-}
 use App\Models\Kelas;
 
 class Siswa extends Model

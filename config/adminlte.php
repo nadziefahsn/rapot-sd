@@ -213,9 +213,6 @@ return [
             'text' => 'Tahun Pelajaran',
             'url'  => 'admin/tahun_ajaran',
             'icon' => 'fas fa-calendar-alt',
-
-            'type' => 'fullscreen-widget',
-            'topnav_right' => true,
         ],
 
         // Sidebar items:
@@ -625,6 +622,10 @@ return [
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js',
                 ],
             ],
+<<<<<<< HEAD
+=======
+>>>>>>> f0ccd7c706d39c82eb28053eeba364505f23ba88
+>>>>>>> dashboard
         ],
         'summernote' => [
             'active' => true,
