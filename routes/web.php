@@ -24,6 +24,7 @@ use App\Http\Controllers\AmalanIbadahController;
 use App\Http\Controllers\NilaiHafalanController;
 use App\Http\Controllers\TahfidzController;
 use App\Http\Controllers\NilaiEkstrakulikulerController;
+use App\Http\Controllers\PdfController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -34,6 +35,7 @@ Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('admin/pengumuman', PengumumanController::class);
+    Route::resource('pdf', PdfController::class)->only(['show', 'index']);
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
@@ -46,6 +48,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::put('guru/{id}/update-user', [GuruController::class, 'updateUser'])->name('guru.update-user');
     Route::post('guru/import', [GuruController::class, 'import'])->name('guru.import');
     Route::post('kelas/duplicate', [KelasController::class, 'duplicateFromPreviousSemester'])->name('kelas.duplicate');
+    Route::resource('kelas', KelasController::class)->parameters(['kelas' => 'kelas']);
     Route::resource('kelas', KelasController::class)->parameters(['kelas' => 'kelas']);
     Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas'])->names('admin.anggota-kelas');
     Route::post('siswa/import', [SiswaController::class, 'import'])->name('siswa.import');
