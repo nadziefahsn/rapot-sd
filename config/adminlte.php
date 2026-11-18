@@ -894,6 +894,12 @@ return [
                 'icon' => 'fas fa-fw fa-sticky-note',
                 'can'  => 'guru',
             ],  
+            [
+                'text' => 'Mulok Khas PI',
+                'url'  => 'guru/mulok', 
+                'icon' => 'fas fa-fw fa-sticky-note',
+                'can'  => 'guru',
+            ],  
         ],
     ],
             [
