@@ -9,22 +9,39 @@ return [
 
     'use_ico_only' => false,
     'use_full_favicon' => false,
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Panel Logo
+    |--------------------------------------------------------------------------
+    |
+    | Here you can change the logo of your admin panel. The 'logo' option holds
+    | the brand text (html is allowed) and 'logo_img' the image placed next to
+    | it, relative to the public folder.
+    |
+    | The optional 'logo_img_xl' option enables the AdminLTE logo switch: the
+    | 'logo_img' one is then only shown while the sidebar is collapsed, and
+    | this larger image replaces it while the sidebar is expanded.
+    |
+    | For detailed instructions you can look the logo section here:
+    | https://jeroennoten.github.io/Laravel-AdminLTE/sections/configuration/basic_configuration.html
+    |
+    */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/assets/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image opacity-75 shadow',
+    'logo' => 'E-Raport ASTS SD GIS',
+    'logo_img' => 'img/logo-sd-tv-edit.png',
+    'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs opacity-75',
     'logo_img_alt' => 'Admin Logo',
 
     'auth_logo' => [
-        'enabled' => false,
+        'enabled' => true,
         'img' => [
-            'path' => 'vendor/adminlte/dist/assets/img/AdminLTELogo.png',
+            'path' => 'img/logo-samping.png',
             'alt' => 'Auth Logo',
             'class' => '',
-            'width' => 50,
-            'height' => 50,
+            'width' => 320,
+            'height' => null,
         ],
     ],
 
@@ -52,8 +69,8 @@ return [
     'logout_url' => 'logout',
     'logout_method' => null,
     'login_url' => 'login',
-    'register_url' => 'register',
-    'password_reset_url' => 'password/reset',
+    'register_url' => null,
+    'password_reset_url' => null,
     'password_email_url' => 'password/email',
     'profile_url' => false,
 
@@ -197,23 +214,6 @@ return [
 
     'auth_social_links' => [],
     'auth_social_links_separator' => null,
-
-    'menu' => [
-        [
-            'text' => 'Dashboard',
-            'url'  => 'admin/dashboard',
-            'icon' => 'fas fa-fw fa-tachometer-alt',
-        ],
-        [
-            'text' => 'Informasi Sekolah',
-            'url'  => 'admin/sekolah',
-            'icon' => 'fas fa-school',
-        ],
-        [
-            'text' => 'Tahun Pelajaran',
-            'url'  => 'admin/tahun_ajaran',
-            'icon' => 'fas fa-calendar-alt',
-        ],
 
         // Sidebar items:
         [
@@ -386,7 +386,8 @@ return [
                 ],
             ],
         ],
-    ],
+    ]
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -451,6 +452,16 @@ return [
                 'type' => 'css',
                 'asset' => true,
                 'location' => 'vendor/fontawesome-free/css/all.min.css',
+            ],
+        ],
+    ],
+        'CustomAdmin' => [
+        'active' => true,
+        'files' => [
+            [
+                'type' => 'css',
+                'asset' => true,
+                'location' => 'css/custom-admin.css',
             ],
         ],
     ],
