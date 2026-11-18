@@ -25,6 +25,7 @@ use App\Http\Controllers\NilaiHafalanController;
 use App\Http\Controllers\TahfidzController;
 use App\Http\Controllers\NilaiEkstrakulikulerController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -39,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('pengumuman', PengumumanController::class);
     Route::resource('sekolah', SekolahController::class)->except(['create','show','edit','destroy'])->whereNumber('sekolah');
     Route::resource('tahun_ajaran', TahunAjaranController::class);
@@ -64,6 +66,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'role:guru'])->prefix('guru')->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas'])->names('guru.anggota-kelas');
     Route::resource('kehadiran', KehadiranController::class);
     Route::resource('catatan', CatatanController::class);

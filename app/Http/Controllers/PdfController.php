@@ -30,7 +30,7 @@ class PdfController extends Controller
             $anggotaKelasId = $anggotaKelas->id;
         }
 
-        return $this->show($request, $anggotaKelasId);
+        return $this->show($anggotaKelasId);
     }
 
     public function create()
@@ -63,7 +63,7 @@ class PdfController extends Controller
         $tahunAjaranAktif = TahunAjaran::latest()->first();
 
         $anggotaKelas = AnggotaKelas::with([
-            'siswa', 
+            'siswa',
             'kelas.waliKelas',
             'intrakulikuler.mapel',
             'kehadiran',
@@ -72,6 +72,7 @@ class PdfController extends Controller
         ])->findOrFail($decryptedId);
 
         $jenjang = preg_replace('/[^0-9]/', '', $anggotaKelas->kelas->rombel ?? '');
+
         $kelasSejenjangIds = Kelas::where('rombel', 'LIKE', '%' . $jenjang . '%')
             ->pluck('id');
 
@@ -85,13 +86,7 @@ class PdfController extends Controller
             ->whereIn('id', $mapelIdsTerisi)
             ->get();
 
-        $mapelAmalanIbadah = Mapel::where('kategori', 'Amal Ibadah')->get();
-
         if ($anggotaKelas->intrakulikuler) {
-            $listIntra = $anggotaKelas->intrakulikuler instanceof \Illuminate\Database\Eloquent\Collection
-                ? $anggotaKelas->intrakulikuler
-                : collect([$anggotaKelas->intrakulikuler]);
-
             foreach ($listIntra as $intra) {
                 $dataDeskripsi = Deskripsi::where('mapel_id', $intra->mapel_id)
                     ->whereIn('kelas_id', $kelasSejenjangIds)
@@ -113,7 +108,43 @@ class PdfController extends Controller
             }
         }
 
+        $mapelAmalanIbadah = Mapel::where('kategori', 'Amal Ibadah')->get();
+
+        foreach ($mapelAmalanIbadah as $mapel) {
+            $itemAmalan = $anggotaKelas->amalanIbadahs->first(function ($ai) use ($mapel) {
+                return $ai->mapel_id == $mapel->id;
+            });
+
+            $nilaiAngka = $itemAmalan ? (int) $itemAmalan->nilai : 0;
+            $namaMapelLower = strtolower($mapel->mapel ?? $mapel->nama_mapel ?? '');
+
+            if (str_contains($namaMapelLower, 'salat') || str_contains($namaMapelLower, 'sholat')) {
+                if ($nilaiAngka <= 81) {
+                    $mapel->deskripsi = "Salat 5 waktu harus dimotivasi agar menjadi kebiasaan.";
+                } elseif ($nilaiAngka <= 93) {
+                    $mapel->deskripsi = "Salat sudah mulai berkembang dan perlu peningkatan agar menjadi kebiasaan.";
+                } else {
+                    $mapel->deskripsi = "Salat sudah menjadi kebiasaan semoga selalu istiqamah dalam beribadah.";
+                }
+            } elseif (str_contains($namaMapelLower, 'tilawah')) {
+                if ($nilaiAngka <= 81) {
+                    $mapel->deskripsi = "Tilawah harus dimotivasi agar menjadi kebiasaan.";
+                } elseif ($nilaiAngka <= 93) {
+                    $mapel->deskripsi = "Tilawah sudah mulai berkembang dan perlu peningkatan agar menjadi kebiasaan.";
+                } else {
+                    $mapel->deskripsi = "Tilawah sudah menjadi kebiasaan semoga selalu istiqamah dalam beribadah.";
+                }
+            } else {
+                $mapel->deskripsi = $itemAmalan ? $itemAmalan->nilai : '-';
+            }
+        }
+
         $siswa = $anggotaKelas->siswa;
+
+        $pathCover = public_path('asset/cover.sd.jpeg');
+        $typeCover = pathinfo($pathCover, PATHINFO_EXTENSION);
+        $dataCover = file_exists($pathCover) ? file_get_contents($pathCover) : '';
+        $base64Cover = 'data:image/' . $typeCover . ';base64,' . base64_encode($dataCover);
 
         $pdf = Pdf::loadView('pdf.rapot', compact(
             'anggotaKelas',
@@ -122,12 +153,14 @@ class PdfController extends Controller
             'mapelIntrakulikuler',
             'catatan',
             'mapelAmalanIbadah',
-            'tahunAjaranAktif'
+            'tahunAjaranAktif',
+            'base64Cover'
         ))->setPaper('A4', 'portrait')
-        ->setOption($pdfOptions);
+          ->setOption($pdfOptions);
 
         $namaKelas = $anggotaKelas->kelas->rombel ?? 'Kelas';
         $namaSiswa = $siswa->nama_siswa ?? 'Siswa';
+
         $fileName = 'Penilaian Karakter & Biodata - ' . trim($namaKelas) . '_' . trim($namaSiswa) . '.pdf';
 
         return response($pdf->output(), 200, [
