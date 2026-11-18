@@ -2,32 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Rombel;
+use App\Models\Sekolah;
+use App\Models\Pengumuman;
 use App\Models\Siswa;
 use App\Models\Guru;
-use App\Models\RuangKelas;
-use App\Models\Sekolah;
+use App\Models\Kelas;
+use App\Models\TahunAjaran;
 
 class DashboardController extends Controller
 {
+    
     public function index()
     {
-        // Mengambil jumlah data dari database dengan aman
-        $totalRombel = class_exists(Rombel::class) ? Rombel::count() : 0;
-        $totalSiswa  = class_exists(Siswa::class) ? Siswa::count() : 0;
-        $totalGuru   = class_exists(Guru::class) ? Guru::count() : 0;
-        $totalRuang  = class_exists(RuangKelas::class) ? RuangKelas::count() : 0;
+        $sekolah = Sekolah::first();
+        $pengumumans = Pengumuman::latest()->get();
 
-        // Mengambil data informasi sekolah pertama dari database
-        $sekolah = class_exists(Sekolah::class) ? Sekolah::first() : null;
+        $jumlahSiswa = Siswa::count();
+        $jumlahGuru = Guru::count();
+        $jumlahKelas = Kelas::count();
 
-        return view('admin.dashboard', compact(
-            'totalRombel', 
-            'totalSiswa', 
-            'totalGuru', 
-            'totalRuang', 
-            'sekolah'
-        ));
+        $tahunAjaranAktif = TahunAjaran::latest()->first();
+
+        if (!$sekolah) {
+            return redirect()->route('sekolah.index');
+        }else{
+        return view('admin.dashboard.index', compact('sekolah', 'pengumumans', 'jumlahSiswa', 'jumlahGuru', 'jumlahKelas', 'tahunAjaranAktif'));
+    }
     }
 }

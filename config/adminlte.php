@@ -225,7 +225,22 @@ return [
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
-        ['header' => 'MENU UTAMA'],
+        [
+            'header' => 'MENU UTAMA',
+            'can'  => ['admin', 'guru'],
+        ],
+        [
+            'text' => 'Dashboard', 
+            'url' => 'admin/dashboard',
+            'icon' => 'fas fa-tachometer-alt',
+            'can'  => 'admin',
+        ],
+        [
+            'text' => 'Dashboard', 
+            'url' => 'guru/dashboard',
+            'icon' => 'fas fa-tachometer-alt',
+            'can'  => 'guru',
+        ],
         [
             'text' => 'Pengumuman',
             'url'  => 'admin/pengumuman',

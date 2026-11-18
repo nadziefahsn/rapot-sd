@@ -14,7 +14,7 @@ class SekolahSeeder extends Seeder
     public function run(): void
     {
         Sekolah::create([
-            'nama_sekolah' => 'SD Prima Insani',
+            'nama_sekolah' => 'SD GIS Prima Insani',
             'npsn' => '123456789',
             'alamat' => 'Jl. Ciledug',
             'kode' => 'TKBI001',
