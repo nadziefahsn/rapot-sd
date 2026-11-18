@@ -74,6 +74,61 @@
 
 
 <div class="invoice-box">
+    <!-- B. KO KURIKULER DAN EKSTRAKURIKULER -->
+    <div style="font-weight: bold; margin-bottom: 5px;">B. KO KURIKULER DAN EKSTRAKURIKULER</div>
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 20px;">
+        <thead>
+            <tr style="background: #ccc;">
+                <th style="width: 10%; border: 1px solid black; padding: 6px; text-align: center;">NO</th>
+                <th style="width: 35%; border: 1px solid black; padding: 6px; text-align: center;">KO KURIKULER DAN EKSTRAKURIKULER</th>
+                <th style="width: 55%; border: 1px solid black; padding: 6px; text-align: center;">DESKRIPSI</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($mapelEkstrakurikuler ?? [] as $index => $eskul)
+                <tr>
+                    <td style="border: 1px solid black; padding: 6px; text-align: center;">{{ $index + 1 }}</td>
+                    <td style="border: 1px solid black; padding: 6px;">{{ $eskul->nama_kegiatan ?? '-' }}</td>
+                    <td style="border: 1px solid black; padding: 6px; text-align: justify;">{{ $eskul->deskripsi ?? '-' }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3" style="border: 1px solid black; padding: 6px; text-align: center;">Belum ada data ko kurikuler dan ekstrakurikuler.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    <!-- C. MULOK PAI KHAS PRIMA INSANI -->
+    <div style="font-weight: bold; margin-bottom: 5px;">C. MULOK PAI KHAS PRIMA INSANI</div>
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 20px;">
+        <thead>
+            <tr style="background: #ccc;">
+                <th style="width: 10%; border: 1px solid black; padding: 6px; text-align: center;">NO</th>
+                <th style="width: 35%; border: 1px solid black; padding: 6px; text-align: center;">MATERI</th>
+                <th style="width: 55%; border: 1px solid black; padding: 6px; text-align: center;">DESKRIPSI</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($mapelMulok ?? [] as $index => $mulok)
+                <tr>
+                    <td style="border: 1px solid black; padding: 6px; text-align: center;">{{ $index + 1 }}</td>
+                    <td style="border: 1px solid black; padding: 6px;">{{ $mulok->materi ?? '-' }}</td>
+                    <td style="border: 1px solid black; padding: 6px; text-align: justify;">{{ $mulok->deskripsi ?? '-' }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3" style="border: 1px solid black; padding: 6px; text-align: center;">Belum ada data mulok.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+<div class="page-break"></div>
+
+
+<div class="invoice-box">
     <div style="font-weight: bold; margin-bottom: 5px;">A. AMALAN IBADAH</div>
     <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 20px;">
         <thead>
