@@ -77,9 +77,9 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/assets/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image opacity-75 shadow',
+    'logo' => 'E-Raport ASTS SD GIS',
+    'logo_img' => 'img/logo-sd-tv-edit.png',
+    'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs opacity-75',
     'logo_img_alt' => 'Admin Logo',
@@ -98,13 +98,13 @@ return [
     */
 
     'auth_logo' => [
-        'enabled' => false,
+        'enabled' => true,
         'img' => [
-            'path' => 'vendor/adminlte/dist/assets/img/AdminLTELogo.png',
+            'path' => 'img/logo-samping.png',
             'alt' => 'Auth Logo',
             'class' => '',
-            'width' => 50,
-            'height' => 50,
+            'width' => 320,
+            'height' => null,
         ],
     ],
 
@@ -198,8 +198,8 @@ return [
 
     'logout_method' => null,
     'login_url' => 'login',
-    'register_url' => 'register',
-    'password_reset_url' => 'password/reset',
+    'register_url' => null,
+    'password_reset_url' => null,
     'password_email_url' => 'password/email',
     'profile_url' => false,
 
@@ -766,11 +766,6 @@ return [
     'menu' => [
         // Navbar items:
         [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
-        [
             'type' => 'darkmode-widget',
             'topnav_right' => true,
         ],
@@ -1000,6 +995,16 @@ return [
                 'type' => 'css',
                 'asset' => true,
                 'location' => 'vendor/fontawesome-free/css/all.min.css',
+            ],
+        ],
+    ],
+        'CustomAdmin' => [
+        'active' => true,
+        'files' => [
+            [
+                'type' => 'css',
+                'asset' => true,
+                'location' => 'css/custom-admin.css',
             ],
         ],
     ],
