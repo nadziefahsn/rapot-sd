@@ -1,0 +1,13 @@
+.main-sidebar .brand-link {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.75rem 0.8rem !important;
+}
+
+.main-sidebar .brand-link .brand-image {
+    height: 45px !important;
+    max-height: 45px !important;
+    width: auto !important;
+    margin-top: 0 !important;
+    margin-right: 12px !important;
+}
