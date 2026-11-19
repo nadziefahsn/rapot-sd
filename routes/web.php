@@ -26,6 +26,8 @@ use App\Http\Controllers\TahfidzController;
 use App\Http\Controllers\NilaiEkstrakulikulerController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MulokController;
+use App\Models\Mulok;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -66,11 +68,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'role:guru'])->prefix('guru')->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [ DashboardController::class, 'index'])->name('dashboard');
     Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas'])->names('guru.anggota-kelas');
     Route::resource('kehadiran', KehadiranController::class);
     Route::resource('catatan', CatatanController::class);
     Route::resource('intrakulikuler', IntrakulikulerController::class);
+    Route::resource('mulok', MulokController::class);
 });
 
 Route::middleware(['auth', 'role:guru_t2q'])->prefix('guru_t2q')->group(function () {
