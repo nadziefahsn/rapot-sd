@@ -100,6 +100,69 @@
     
     <div class="page-break"></div>
 
+    <div style="font-weight: bold; margin-bottom: 5px; font-size: 12px;">C. MULOK PAI KHAS PRIMA INSANI</div>
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 20px; font-size: 12px;">
+        <thead>
+            <tr style="background: #ccc;">
+                <th style="width: 7%; border: 1px solid black; padding: 6px 10px; text-align: center;">NO</th>
+                <th style="width: 25%; border: 1px solid black; padding: 6px 10px; text-align: center;">MATERI</th>
+                <th style="width: 65%; border: 1px solid black; padding: 6px 10px; text-align: center;">DESKRIPSI</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid black; padding: 6px 10px; text-align: center; font-weight: bold;">A</td>
+                <td colspan="2" style="border: 1px solid black; padding: 6px 10px; font-weight: bold;">Pelajaran Salat</td>
+            </tr>
+            @forelse($mulokSholat ?? [] as $index => $mapel)
+                <tr>
+                    <td style="border: 1px solid black; padding: 6px 10px; text-align: center;">{{ $index + 1 }}.</td>
+                    <td style="border: 1px solid black; padding: 6px 10px;">{{ $mapel->mapel ?? '-' }}</td>
+                    <td style="border: 1px solid black; padding: 6px 10px; text-align: justify;">{{ $mapel->deskripsi ?? '-' }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3" style="border: 1px solid black; padding: 6px 10px; text-align: center;">Belum ada data pelajaran salat.</td>
+                </tr>
+            @endforelse
+            <tr>
+                <td style="border: 1px solid black; padding: 6px 10px; text-align: center; font-weight: bold;">B</td>
+                <td colspan="2" style="border: 1px solid black; padding: 6px 10px; font-weight: bold;">Tahsin dan Tahfidz Al-Quran</td>
+            </tr>
+            @forelse($mulokTahsinTahfidz ?? [] as $index => $mapel)
+                <tr>
+                    <td style="border: 1px solid black; padding: 6px 10px; text-align: center;">{{ $index + 1 }}.</td>
+                    <td style="border: 1px solid black; padding: 6px 10px;">{{ $mapel->mapel ?? '-' }}</td>
+                    <td style="border: 1px solid black; padding: 6px 10px; text-align: justify;">{{ $mapel->deskripsi ?? '-' }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3" style="border: 1px solid black; padding: 6px 10px; text-align: center;">Belum ada data tahsin dan tahfidz.</td>
+                </tr>
+            @endforelse
+            <tr>
+                <td style="border: 1px solid black; padding: 6px 10px; text-align: center; font-weight: bold;">C</td>
+                <td colspan="2" style="border: 1px solid black; padding: 6px 10px; font-weight: bold;">Hafalan</td>
+            </tr>
+            @forelse($mulokHafalan ?? [] as $index => $mapel)
+                <tr>
+                    <td style="border: 1px solid black; padding: 6px 10px; text-align: center;">{{ $index + 1 }}.</td>
+                    <td style="border: 1px solid black; padding: 6px 10px;">{{ $mapel->mapel ?? '-' }}</td>
+                    <td style="border: 1px solid black; padding: 6px 10px; text-align: justify;">{{ $mapel->deskripsi ?? '-' }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3" style="border: 1px solid black; padding: 6px 10px; text-align: center;">Belum ada data hafalan.</td>
+                </tr>
+            @endforelse
+            <tr>
+                <td colspan="2" style="border: 1px solid black; padding: 6px 10px; text-align: center; font-weight: bold; vertical-align: middle;">Catatan T2Q</td>
+                <td style="border: 1px solid black; padding: 6px 10px; text-align: justify; font-weight: bold; font-style: italic;">{{ $catatanT2q ?? '-' }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="page-break"></div>
+
 
 <div style="font-weight: bold; margin-bottom: 5px; font-size: 12px;">D. AMALAN IBADAH</div>
 <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 20px; font-size: 12px;">

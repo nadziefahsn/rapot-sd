@@ -46,6 +46,11 @@ class AnggotaKelas extends Model
         return $this->hasMany(Intrakulikuler::class, 'anggota_kelas_id');
     }
 
+    public function mulok()
+    {
+        return $this->hasMany(Mulok::class, 'anggota_kelas_id');
+    }
+
     public function halaqah()
     {
         return $this->hasOne(HalaqahSiswa::class, 'anggota_kelas_id');
