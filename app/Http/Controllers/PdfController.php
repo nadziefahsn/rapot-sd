@@ -9,6 +9,7 @@ use App\Models\Kehadiran;
 use App\Models\Kelas;
 use App\Models\Deskripsi;
 use App\Models\Mapel;
+use App\Models\Mulok;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Crypt;
@@ -86,6 +87,8 @@ class PdfController extends Controller
             ->whereIn('id', $mapelIdsTerisi)
             ->get();
 
+        $mapelKokurikuler = Mapel::where('kategori', 'KO Kulikuler dan Extrakurikuler')->get();
+
         if ($anggotaKelas->intrakulikuler) {
             foreach ($listIntra as $intra) {
                 $dataDeskripsi = Deskripsi::where('mapel_id', $intra->mapel_id)
@@ -151,6 +154,7 @@ class PdfController extends Controller
             'siswa',
             'kehadirans',
             'mapelIntrakulikuler',
+            'mapelKokurikuler',
             'catatan',
             'mapelAmalanIbadah',
             'tahunAjaranAktif',

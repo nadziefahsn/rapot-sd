@@ -18,7 +18,7 @@
 @section('content')
 @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check me-1"></i> {{ session('success') }}
+        <i class="fas fa-check me-1"></i> {{ session('success'kkkkk) }}
     </div>
 @endif
 
