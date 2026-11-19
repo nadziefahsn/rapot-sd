@@ -1,47 +1,37 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
-
-class LoginController extends Controller
+return new class extends Migration
 {
-    use AuthenticatesUsers;
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('sekolahs', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_sekolah');
+            $table->string('npsn');
+            $table->text('alamat');
+            $table->string('kode');
+            $table->string('telepon');
+            $table->string('desa');
+            $table->string('kecamatan');
+            $table->string('kabupaten');
+            $table->string('provinsi');
+            $table->string('logo')->nullable();
+            $table->timestamps();
+        });
+    }
 
     /**
-     * Redirect setelah berhasil login
+     * Reverse the migrations.
      */
-    protected $redirectTo = '/admin/dashboard';
-
-    public function __construct()
+    public function down(): void
     {
-        $this->middleware('guest')->except('logout');
-        $this->middleware('auth')->only('logout');
+        Schema::dropIfExists('sekolahs');
     }
-
-    /**
-     * Mengubah field login menjadi nipy
-     */
-    public function username()
-    {
-        return 'nipy';
-    }
-
-    /**
-     * Menimpa aturan validasi agar NIPY tidak wajib berformat email
-     */
-    protected function validateLogin(Request $request)
-    {
-        $request->validate([
-            $this->username() => 'required|string',
-            'password' => 'required|string',
-        ]);
-    }
-
-    protected function loggedOut(Request $request)
-    {
-        return redirect('/login');
-    }
-}
+};

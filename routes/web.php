@@ -25,7 +25,6 @@ use App\Http\Controllers\NilaiHafalanController;
 use App\Http\Controllers\TahfidzController;
 use App\Http\Controllers\NilaiEkstrakulikulerController;
 use App\Http\Controllers\PdfController;
-use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -109,3 +108,4 @@ Route::middleware(['auth', 'role:guru|guru_t2q'])->group(function () {
 });
 
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
