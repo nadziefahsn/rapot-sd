@@ -68,7 +68,12 @@ class PdfController extends Controller
             'intrakulikuler.mapel',
             'kehadiran',
             'catatan',
-            'amalanIbadahs'
+            'amalanIbadahs',
+            'nilaiSholat',
+            'nilaiTahsin',
+            'tahfidz',
+            'nilaiHafalan',
+            'catatanT2q'
         ])->findOrFail($decryptedId);
 
         $jenjang = preg_replace('/[^0-9]/', '', $anggotaKelas->kelas->rombel ?? '');
@@ -139,6 +144,162 @@ class PdfController extends Controller
             }
         }
 
+        $getPredikat = function ($nilai) {
+            if (!is_numeric($nilai) || $nilai <= 0) return null;
+            if ($nilai <= 79) return 'kurang';
+            if ($nilai <= 89) return 'baik';
+            return 'sangat baik';
+        };
+
+        $mapelsSholatDb = Mapel::where('kategori', 'Mulok PAI Khas Prima Insani')
+            ->where(function ($q) {
+                $q->where('mapel', 'LIKE', '%Wudhu%')
+                  ->orWhere('mapel', 'LIKE', '%Wudu%')
+                  ->orWhere('mapel', 'LIKE', '%Sholat%')
+                  ->orWhere('mapel', 'LIKE', '%Salat%');
+            })
+            ->get();
+
+        $mulokSholat = collect();
+
+        foreach ($mapelsSholatDb as $m) {
+            $itemNilai = $anggotaKelas->nilaiSholat->firstWhere('mapel_id', $m->id);
+            $predikat = $getPredikat($itemNilai?->nilai);
+            $namaLower = strtolower($m->mapel);
+
+            $deskripsi = '-';
+            if ($predikat) {
+                if (str_contains($namaLower, 'wudhu') || str_contains($namaLower, 'wudu')) {
+                    $deskripsi = "Ananda {$predikat} dalam mempraktikkan dan memahami tata cara wudu.";
+                } elseif (str_contains($namaLower, 'bacaan')) {
+                    $deskripsi = "Ananda {$predikat} dalam mempraktikkan dan menyebutkan bacaan gerakan salat.";
+                } elseif (str_contains($namaLower, 'gerakan')) {
+                    $deskripsi = "Ananda {$predikat} dalam mempraktikkan dan memahami tata cara gerakan salat.";
+                } elseif (str_contains($namaLower, 'dzikir') || str_contains($namaLower, 'zikir')) {
+                    $deskripsi = "Ananda {$predikat} dalam melafalkan bacaan zikir bakda salat.";
+                }
+            }
+
+            $mulokSholat->push((object) [
+                'mapel'     => $m->mapel,
+                'deskripsi' => $deskripsi,
+            ]);
+        }
+
+        $mapelsTahsinTahfidzDb = Mapel::where('kategori', 'Mulok PAI Khas Prima Insani')
+            ->where(function ($q) {
+                $q->where('mapel', 'LIKE', '%Tahsin%')
+                  ->orWhere('mapel', 'LIKE', '%Tahfidz%')
+                  ->orWhere('mapel', 'LIKE', '%Tahfiz%');
+            })
+            ->get();
+
+        $mulokTahsinTahfidz = collect();
+
+        foreach ($mapelsTahsinTahfidzDb as $m) {
+            $namaLower = strtolower($m->mapel);
+
+            if (str_contains($namaLower, 'tahsin')) {
+                $dataTahsin = $anggotaKelas->nilaiTahsin->first();
+                $predikatTahsin = $getPredikat($dataTahsin?->nilai);
+                $deskTahsin = '-';
+
+                if ($dataTahsin && $predikatTahsin) {
+                    $jilidHal = trim(($dataTahsin->jilid ?? '') . ' ' . ($dataTahsin->halaman ?? ''));
+                    $kelebihan = is_array($dataTahsin->kelebihan) && count($dataTahsin->kelebihan) > 0
+                        ? implode(', ', $dataTahsin->kelebihan)
+                        : '-';
+                    $kekurangan = is_array($dataTahsin->kekurangan) && count($dataTahsin->kekurangan) > 0
+                        ? implode(', ', $dataTahsin->kekurangan)
+                        : '-';
+
+                    $deskTahsin = "Ananda {$predikatTahsin} dalam menguasai kompetensi tahsin {$jilidHal}";
+                    if ($kelebihan !== '-') {
+                        $deskTahsin .= ", terutama dalam {$kelebihan}";
+                    }
+                    if ($kekurangan !== '-') {
+                        $deskTahsin .= ", perlu peningkatan dalam {$kekurangan}";
+                    }
+                    $deskTahsin .= ".";
+                }
+
+                $mulokTahsinTahfidz->push((object) [
+                    'mapel'     => $m->mapel,
+                    'deskripsi' => $deskTahsin,
+                ]);
+            } elseif (str_contains($namaLower, 'tahfidz') || str_contains($namaLower, 'tahfiz')) {
+                $dataTahfidz = $anggotaKelas->tahfidz->first();
+                $predikatTahfidz = $getPredikat($dataTahfidz?->nilai);
+                $deskTahfidz = '-';
+
+                if ($dataTahfidz && $predikatTahfidz) {
+                    $surah = is_array($dataTahfidz->surah) && count($dataTahfidz->surah) > 0
+                        ? implode(', ', $dataTahfidz->surah)
+                        : '-';
+                    $kelebihan = is_array($dataTahfidz->kelebihan) && count($dataTahfidz->kelebihan) > 0
+                        ? implode(', ', $dataTahfidz->kelebihan)
+                        : '-';
+                    $kekurangan = is_array($dataTahfidz->kekurangan) && count($dataTahfidz->kekurangan) > 0
+                        ? implode(', ', $dataTahfidz->kekurangan)
+                        : '-';
+
+                    $deskTahfidz = "Ananda {$predikatTahfidz} dalam melafalkan {$surah}";
+                    if ($kelebihan !== '-') {
+                        $deskTahfidz .= ", terutama dalam {$kelebihan}";
+                    }
+                    if ($kekurangan !== '-') {
+                        $deskTahfidz .= ", perlu peningkatan dalam {$kekurangan}";
+                    }
+                    $deskTahfidz .= ".";
+                }
+
+                $mulokTahsinTahfidz->push((object) [
+                    'mapel'     => $m->mapel,
+                    'deskripsi' => $deskTahfidz,
+                ]);
+            }
+        }
+
+        $mapelsHafalanDb = Mapel::where('kategori', 'Mulok PAI Khas Prima Insani')
+            ->where(function ($q) {
+                $q->where('mapel', 'LIKE', '%Hikmah%')
+                  ->orWhere('mapel', 'LIKE', '%Doa%')
+                  ->orWhere('mapel', 'LIKE', '%Hadits%')
+                  ->orWhere('mapel', 'LIKE', '%Hadis%');
+            })
+            ->get();
+
+        $mulokHafalan = collect();
+
+        foreach ($mapelsHafalanDb as $m) {
+            $itemNilai = $anggotaKelas->nilaiHafalan->firstWhere('mapel_id', $m->id);
+            $predikat = $getPredikat($itemNilai?->nilai);
+            $namaLower = strtolower($m->mapel);
+
+            $dataDeskripsi = Deskripsi::where('mapel_id', $m->id)
+                ->whereIn('kelas_id', $kelasSejenjangIds)
+                ->first();
+            $materi = $dataDeskripsi->deskripsi ?? '';
+
+            $deskripsi = '-';
+            if ($predikat) {
+                if (str_contains($namaLower, 'hikmah')) {
+                    $deskripsi = trim("Ananda {$predikat} dalam menghafal dan memahami kata-kata hikmah {$materi}") . ".";
+                } elseif (str_contains($namaLower, 'doa')) {
+                    $deskripsi = trim("Ananda {$predikat} dalam menghafal {$materi}") . ".";
+                } elseif (str_contains($namaLower, 'hadit') || str_contains($namaLower, 'hadis')) {
+                    $deskripsi = trim("Ananda {$predikat} dalam menghafal dan memahami hadis {$materi}") . ".";
+                }
+            }
+
+            $mulokHafalan->push((object) [
+                'mapel'     => $m->mapel,
+                'deskripsi' => $deskripsi,
+            ]);
+        }
+
+        $catatanT2q = $anggotaKelas->catatanT2q->catatan ?? '-';
+
         $siswa = $anggotaKelas->siswa;
 
         $pathCover = public_path('asset/cover.sd.jpeg');
@@ -153,6 +314,10 @@ class PdfController extends Controller
             'mapelIntrakulikuler',
             'catatan',
             'mapelAmalanIbadah',
+            'mulokSholat',
+            'mulokTahsinTahfidz',
+            'mulokHafalan',
+            'catatanT2q',
             'tahunAjaranAktif',
             'base64Cover'
         ))->setPaper('A4', 'portrait')
