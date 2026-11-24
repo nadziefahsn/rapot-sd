@@ -801,6 +801,12 @@ return [
             'can'  => 'guru',
         ],
         [
+            'text' => 'Dashboard', 
+            'url' => 'guru_t2q/dashboard',
+            'icon' => 'fas fa-tachometer-alt',
+            'can'  => 'guru_t2q',
+        ],
+        [
             'text' => 'Pengumuman',
             'url'  => 'admin/pengumuman',
             'icon' => 'fas fa-bullhorn',

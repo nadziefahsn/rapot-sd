@@ -42,7 +42,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('pengumuman', PengumumanController::class);
     Route::resource('sekolah', SekolahController::class)->except(['create','show','edit','destroy'])->whereNumber('sekolah');
     Route::resource('tahun_ajaran', TahunAjaranController::class);
@@ -68,7 +68,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'role:guru'])->prefix('guru')->group(function () {
-    Route::get('dashboard', [ DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [ DashboardController::class, 'index'])->name('guru.dashboard');
     Route::resource('anggota-kelas', AnggotaKelasController::class)->parameters(['anggota-kelas' => 'anggotaKelas'])->names('guru.anggota-kelas');
     Route::resource('kehadiran', KehadiranController::class);
     Route::resource('catatan', CatatanController::class);
@@ -77,7 +77,8 @@ Route::middleware(['auth', 'role:guru'])->prefix('guru')->group(function () {
 });
 
 Route::middleware(['auth', 'role:guru_t2q'])->prefix('guru_t2q')->group(function () {
-    Route::resource('catatan', CatatanT2qController::class)->names([
+Route::get('dashboard', [DashboardController::class, 'index'])->name('guru_t2q.dashboard');
+Route::resource('catatan', CatatanT2qController::class)->names([
         'index'   => 'guru_t2q.catatan.index',
         'store'   => 'guru_t2q.catatan.store',
         'update'  => 'guru_t2q.catatan.update',

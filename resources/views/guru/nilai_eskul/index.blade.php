@@ -37,7 +37,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($dataEskul as $e)
+                @foreach($dataEskul as $e)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $e->nama_ekstrakulikuler }}</td>
@@ -60,11 +60,7 @@
                             </nobr>
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="text-center">Belum ada data ekstrakurikuler.</td>
-                    </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -91,7 +87,10 @@
                 "lengthChange": true,
                 "columnDefs": [
                     { "orderable": false, "targets": 3 } 
-                ]
+                ],
+                "language": {
+                    "emptyTable": "Belum ada data ekstrakurikuler."
+                }
             });
         });
     </script>
