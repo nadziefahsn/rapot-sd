@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ public_path('asset/raport.css') }}">
@@ -97,8 +99,50 @@
             @endforelse
         </tbody>
     </table>
-    
+
     <div class="page-break"></div>
+    
+    <div style="font-weight: bold; margin-bottom: 5px; font-size: 12px">B. KO KURIKULER DAN EKSTRAKURIKULER</div>
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 20px; font-size: 12px">
+        <thead>
+            <tr style="background: #ccc;">
+                <th style="width: 7%; border: 1px solid black; padding: 6px; text-align: center;">NO</th>
+                <th style="width: 25%; border: 1px solid black; padding: 6px; text-align: center;">KO KURIKULER DAN EKSTRAKURIKULER</th>
+                <th style="width: 65%; border: 1px solid black; padding: 6px; text-align: center;">DESKRIPSI</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php $no = 1; @endphp
+
+            @foreach($mapelKokurikuler ?? [] as $mapel)
+                @php
+                    $itemMulok = $anggotaKelas?->muloks?->first(function($m) use ($mapel) {
+                        return $m->mapel_id == $mapel->id;
+                    });
+                    $deskripsiKokurikuler = $itemMulok ? $itemMulok->deskripsi_otomatis : '-';
+                @endphp
+                <tr>
+                    <td style="border: 1px solid black; padding: 6px; text-align: center; font-size: 12px">{{ $no++ }}</td>
+                    <td style="border: 1px solid black; padding: 6px; font-size: 12px">{{ $mapel->mapel ?? $mapel->nama ?? '-' }}</td>
+                    <td style="border: 1px solid black; padding: 6px; text-align: justify; font-size: 12px">{{ $deskripsiKokurikuler }}</td>
+                </tr>
+            @endforeach
+
+            @foreach($listEkstrakulikuler ?? [] as $eskul)
+                <tr>
+                    <td style="border: 1px solid black; padding: 6px; text-align: center; font-size: 12px">{{ $no++ }}</td>
+                    <td style="border: 1px solid black; padding: 6px; font-size: 12px">{{ $eskul->nama }}</td>
+                    <td style="border: 1px solid black; padding: 6px; text-align: justify; font-size: 12px">{{ $eskul->deskripsi }}</td>
+                </tr>
+            @endforeach
+
+            @if(($mapelKokurikuler->isEmpty() ?? true) && ($listEkstrakulikuler->isEmpty() ?? true))
+                <tr>
+                    <td colspan="3" style="border: 1px solid black; padding: 6px; text-align: center;">Belum ada data ko kurikuler dan ekstrakurikuler.</td>
+                </tr>
+            @endif
+        </tbody>
+    </table>
 
     <div style="font-weight: bold; margin-bottom: 5px; font-size: 12px;">C. MULOK PAI KHAS PRIMA INSANI</div>
     <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 20px; font-size: 12px;">
@@ -161,8 +205,8 @@
             </tr>
         </tbody>
     </table>
-    <div class="page-break"></div>
 
+    <div class="page-break"></div>
 
 <div style="font-weight: bold; margin-bottom: 5px; font-size: 12px;">D. AMALAN IBADAH</div>
 <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 20px; font-size: 12px;">
@@ -232,7 +276,8 @@
     </tbody>
 </table>
 <div style="height: 40px;"></div>
-<table style="width: 100%; border: none; margin-top: 0; text-align: center; font-size: 12px;">    <tr>
+<table style="width: 100%; border: none; margin-top: 0; text-align: center; font-size: 12px;">
+    <tr>
         <td style="width: 50%; vertical-align: top; padding: 6px 10px;">
             Mengetahui,<br>Orang Tua Siswa
             <br><br><br><br><br>

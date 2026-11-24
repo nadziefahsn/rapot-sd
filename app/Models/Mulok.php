@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Mulok extends Model
 {
     protected $table = 'muloks';
-
+    protected $guarded = ['id'];
     protected $fillable = [
         'anggota_kelas_id',
         'mapel_id',
-        'nilai',
+        'nilai_ph',  
+        'nilai_npts',  
+        'nilai_akhir'
     ];
 
     public function anggotaKelas()

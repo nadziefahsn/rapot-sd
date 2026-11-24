@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('anggota_kelas_id')->constrained()->cascadeOnDelete();
             $table->foreignId('mapel_id')->constrained('mapels')->cascadeOnDelete();
-            $table->string('nilai');
+            $table->decimal('nilai_ph', 5, 2)->nullable();    
+            $table->decimal('nilai_npts', 5, 2)->nullable();  
+            $table->decimal('nilai_akhir', 5, 2)->nullable();  
             $table->timestamps();
         });
     }
