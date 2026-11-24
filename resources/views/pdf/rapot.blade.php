@@ -55,17 +55,17 @@
         </tr>
         <tr>
             <td><b>NIS</b></td>
-            <td><b>:</b></td>
+            <td class="separator-col"><b>:</b></td>
             <td><b>{{ $anggotaKelas->siswa->nis ?? '-' }}</b></td>
         </tr>
         <tr>
             <td><b>NISN</b></td>
-            <td><b>:</b></td>
+            <td class="separator-col"><b>:</b></td>
             <td><b>{{ $anggotaKelas->siswa->nisn ?? '-' }}</b></td>
         </tr>
         <tr>
             <td><b>Kelas</b></td>
-            <td><b>:</b></td>
+            <td class="separator-col"><b>:</b></td>
             <td><b>{{ $anggotaKelas->kelas->rombel ?? '-' }}</b></td>
         </tr>
     </table>

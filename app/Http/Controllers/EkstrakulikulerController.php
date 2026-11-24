@@ -34,7 +34,22 @@ class EkstrakulikulerController extends Controller
 
     public function store(EkstrakulikulerRequest $request)
     {
-        Ekstrakulikuler::create($request->validated());
+        $validated = $request->validated();
+
+        $ekstrakulikuler = Ekstrakulikuler::firstOrCreate(
+            [
+                'nama_ekstrakulikuler' => $validated['nama_ekstrakulikuler'],
+                'tahun_ajaran_id'      => $validated['tahun_ajaran_id'],
+            ],
+            [
+                'pendamping_id' => $validated['pendamping_id'],
+            ]
+        );
+
+        if (!$ekstrakulikuler->wasRecentlyCreated) {
+            return redirect()->route('ekstrakulikuler.index')
+                ->with('error', 'Data ekstrakulikuler tersebut sudah terdaftar pada tahun ajaran ini.');
+        }
 
         return redirect()->route('ekstrakulikuler.index')
             ->with('success', 'Data ekstrakulikuler berhasil ditambahkan.');
@@ -91,12 +106,12 @@ class EkstrakulikulerController extends Controller
 
         $request->validate([
             'nama_ekstrakulikuler' => 'required|string|max:255',
-            'guru_id'              => 'required|exists:gurus,id',
+            'pendamping_id'        => 'required|exists:gurus,id',
         ]);
 
         $ekstrakulikuler->update([
             'nama_ekstrakulikuler' => $request->nama_ekstrakulikuler,
-            'guru_id'              => $request->guru_id,
+            'pendamping_id'        => $request->pendamping_id,
         ]);
 
         return redirect()->route('ekstrakulikuler.index')
