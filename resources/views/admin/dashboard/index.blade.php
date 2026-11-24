@@ -15,7 +15,6 @@
 
 @section('content')
 
-    {{-- Card Header Sekolah --}}
     <div class="card shadow-sm sekolah-card mb-3">
         <div class="card-body py-3">
             <h4 class="nama-sekolah mb-1">PG-TK PRIMA INSANI</h4>
@@ -26,7 +25,6 @@
         </div>
     </div>
 
-    {{-- Row Small Box (Statistik) --}}
     <div class="row">
         <div class="col-lg-3 col-6">
             <div class="small-box text-bg-info custom-info">
@@ -89,9 +87,7 @@
         </div>
     </div>
 
-    {{-- Row Pengumuman & Informasi Sekolah --}}
     <div class="row">
-        {{-- Kolom Kiri: Pengumuman --}}
         <div class="col-md-6 mb-3">
             <div class="card shadow-sm">
                 <div class="card-header custom-bg-success text-white">
@@ -140,7 +136,6 @@
                             </div>
                         @endforelse
 
-                        {{-- Ikon Jam Penutup Timeline --}}
                         <div class="lte3-timeline-entry mb-0">
                             <i class="fas fa-clock lte3-timeline-icon bg-secondary text-white"></i>
                         </div>
@@ -149,7 +144,6 @@
             </div>
         </div>
 
-        {{-- Kolom Kanan: Informasi Sekolah --}}
         <div class="col-md-6 mb-3">
             <div class="card shadow-sm">
                 <div class="card-header custom-bg-info text-white">
