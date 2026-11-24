@@ -26,7 +26,7 @@
 
     <div class="row">
         <div class="col-lg-3 col-6">
-            <div class="small-box text-bg-info shadow-sm">
+            <div class="small-box text-bg-primary shadow-sm">
                 <div class="inner">
                     <h3>{{ $jumlahKelas }}</h3>
                     <p>Rombel</p>

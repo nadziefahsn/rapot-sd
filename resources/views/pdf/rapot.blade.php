@@ -112,23 +112,35 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($mapelKokurikuler ?? [] as $index => $mapel)
+            @php $no = 1; @endphp
+
+            @foreach($mapelKokurikuler ?? [] as $mapel)
                 @php
-                    $itemKokurikuler = $anggotaKelas?->intrakulikuler?->first(function($intra) use ($mapel) {
-                        return $intra->mapel_id == $mapel->id;
+                    $itemMulok = $anggotaKelas?->muloks?->first(function($m) use ($mapel) {
+                        return $m->mapel_id == $mapel->id;
                     });
-                    $deskripsiKokurikuler = $itemKokurikuler ? $itemKokurikuler->deskripsi_otomatis : '-';
+                    $deskripsiKokurikuler = $itemMulok ? $itemMulok->deskripsi_otomatis : '-';
                 @endphp
                 <tr>
-                    <td style="border: 1px solid black; padding: 6px; text-align: center; font-size: 12px">{{ $index + 1 }}</td>
-                    <td style="border: 1px solid black; padding: 6px; font-size: 12px">{{ $mapel->mapel ?? '-' }}</td>
+                    <td style="border: 1px solid black; padding: 6px; text-align: center; font-size: 12px">{{ $no++ }}</td>
+                    <td style="border: 1px solid black; padding: 6px; font-size: 12px">{{ $mapel->mapel ?? $mapel->nama ?? '-' }}</td>
                     <td style="border: 1px solid black; padding: 6px; text-align: justify; font-size: 12px">{{ $deskripsiKokurikuler }}</td>
                 </tr>
-            @empty
+            @endforeach
+
+            @foreach($listEkstrakulikuler ?? [] as $eskul)
+                <tr>
+                    <td style="border: 1px solid black; padding: 6px; text-align: center; font-size: 12px">{{ $no++ }}</td>
+                    <td style="border: 1px solid black; padding: 6px; font-size: 12px">{{ $eskul->nama }}</td>
+                    <td style="border: 1px solid black; padding: 6px; text-align: justify; font-size: 12px">{{ $eskul->deskripsi }}</td>
+                </tr>
+            @endforeach
+
+            @if(($mapelKokurikuler->isEmpty() ?? true) && ($listEkstrakulikuler->isEmpty() ?? true))
                 <tr>
                     <td colspan="3" style="border: 1px solid black; padding: 6px; text-align: center;">Belum ada data ko kurikuler dan ekstrakurikuler.</td>
                 </tr>
-            @endforelse
+            @endif
         </tbody>
     </table>
     

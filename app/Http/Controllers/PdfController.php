@@ -10,6 +10,7 @@ use App\Models\Kelas;
 use App\Models\Deskripsi;
 use App\Models\Mapel;
 use App\Models\Mulok;
+use App\Models\EkstrakulikulerSiswa;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Crypt;
@@ -34,12 +35,12 @@ class PdfController extends Controller
         return $this->show($anggotaKelasId);
     }
 
-    public function create()
+    public function create() 
     {
         
     }
 
-    public function store(Request $request)
+    public function store(Request $request) 
     {
         
     }
@@ -67,6 +68,7 @@ class PdfController extends Controller
             'siswa',
             'kelas.waliKelas',
             'intrakulikuler.mapel',
+            'muloks.mapel',
             'kehadiran',
             'catatan',
             'amalanIbadahs'
@@ -87,8 +89,6 @@ class PdfController extends Controller
             ->whereIn('id', $mapelIdsTerisi)
             ->get();
 
-        $mapelKokurikuler = Mapel::where('kategori', 'KO Kulikuler dan Extrakurikuler')->get();
-
         if ($anggotaKelas->intrakulikuler) {
             foreach ($listIntra as $intra) {
                 $dataDeskripsi = Deskripsi::where('mapel_id', $intra->mapel_id)
@@ -108,6 +108,76 @@ class PdfController extends Controller
                 } else {
                     $intra->deskripsi_otomatis = '-';
                 }
+            }
+        }
+
+        $listMulok = $anggotaKelas->muloks instanceof \Illuminate\Database\Eloquent\Collection
+            ? $anggotaKelas->muloks
+            : ($anggotaKelas->muloks ? collect([$anggotaKelas->muloks]) : collect());
+
+        $mapelMulokIdsTerisi = $listMulok->whereNotNull('nilai_akhir')->pluck('mapel_id');
+
+        $mapelKokurikuler = Mapel::where('kategori', 'KO Kulikuler dan Extrakulikuler')
+            ->whereIn('id', $mapelMulokIdsTerisi)
+            ->get();
+
+        foreach ($listMulok as $mulok) {
+            $dataDeskripsi = Deskripsi::where('mapel_id', $mulok->mapel_id)
+                ->whereIn('kelas_id', $kelasSejenjangIds)
+                ->first();
+
+            $capaian = $dataDeskripsi->deskripsi ?? '-';
+            $nilaiAkhir = $mulok->nilai_akhir;
+
+            if (!is_numeric($nilaiAkhir) || $capaian === '-') {
+                $mulok->deskripsi_otomatis = '-';
+            } elseif ($nilaiAkhir <= 79) {
+                $mulok->deskripsi_otomatis = 'Ananda sedang berkembang dalam ' . $capaian;
+            } elseif ($nilaiAkhir <= 89) {
+                $mulok->deskripsi_otomatis = 'Ananda sudah berkembang sesuai harapan dalam ' . $capaian;
+            } elseif ($nilaiAkhir <= 100) {
+                $mulok->deskripsi_otomatis = 'Ananda sangat berkembang dalam ' . $capaian;
+            } else {
+                $mulok->deskripsi_otomatis = '-';
+            }
+        }
+
+        $ekskulSiswas = EkstrakulikulerSiswa::with(['ekstrakulikuler', 'nilaiEkstrakulikuler'])
+            ->where('anggota_kelas_id', $anggotaKelas->id)
+            ->get();
+
+        $listEkstrakulikuler = collect();
+        foreach ($ekskulSiswas as $es) {
+            if ($es->nilaiEkstrakulikuler && !empty($es->nilaiEkstrakulikuler->nilai)) {
+                $predikat = strtoupper($es->nilaiEkstrakulikuler->nilai);
+                $namaEskul = $es->ekstrakulikuler->nama_ekstrakulikuler ?? '-';
+
+                $mapelEskul = Mapel::where('mapel', 'LIKE', '%' . $namaEskul . '%')->first();
+                $mapelEskulId = $mapelEskul ? $mapelEskul->id : null;
+
+                $dataDeskripsi = Deskripsi::where('mapel_id', $mapelEskulId)
+                    ->whereIn('kelas_id', $kelasSejenjangIds)
+                    ->first();
+
+                $capaian = $dataDeskripsi->deskripsi ?? '-';
+
+                $deskripsiEskul = '-';
+                if ($capaian !== '-') {
+                    if ($predikat === 'A') {
+                        $deskripsiEskul = 'Ananda sangat baik dalam ' . $capaian;
+                    } elseif ($predikat === 'B') {
+                        $deskripsiEskul = 'Ananda baik dalam ' . $capaian;
+                    } elseif ($predikat === 'C') {
+                        $deskripsiEskul = 'Ananda cukup dalam ' . $capaian;
+                    } else {
+                        $deskripsiEskul = 'Ananda perlu bimbingan dalam ' . $capaian;
+                    }
+                }
+
+                $listEkstrakulikuler->push((object)[
+                    'nama' => $namaEskul,
+                    'deskripsi' => $deskripsiEskul
+                ]);
             }
         }
 
@@ -155,6 +225,7 @@ class PdfController extends Controller
             'kehadirans',
             'mapelIntrakulikuler',
             'mapelKokurikuler',
+            'listEkstrakulikuler',
             'catatan',
             'mapelAmalanIbadah',
             'tahunAjaranAktif',
@@ -173,17 +244,17 @@ class PdfController extends Controller
         ]);
     }
 
-    public function edit(string $id)
+    public function edit(string $id) 
     {
         
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id) 
     {
         
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id) 
     {
         
     }

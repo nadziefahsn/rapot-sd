@@ -23,8 +23,10 @@ class MulokRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nilai' => 'nullable|array',
-            'nilai.*.*' => 'nullable|numeric|min:0',
+            'nilai_ph' => 'nullable|array',
+            'nilai_ph.*' => 'nullable|numeric|min:0|max:100',
+            'nilai_npts' => 'nullable|array',
+            'nilai_npts.*' => 'nullable|numeric|min:0|max:100',
         ];
     }
 }

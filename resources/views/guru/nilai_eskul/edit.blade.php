@@ -52,7 +52,7 @@
                                 <th style="width: 5%;">No</th>
                                 <th style="min-width: 250px;">Nama Siswa</th>
                                 <th style="width: 20%;">Kelas</th>
-                                <th style="width: 30%;">Predikat / Nilai</th>
+                                <th style="width: 30%;">Nilai</th>
                             </tr>
                         </thead>
                         <tbody>
