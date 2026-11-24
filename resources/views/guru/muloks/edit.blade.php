@@ -68,11 +68,11 @@
                 </table>
             </div>
         </div>
-        <div class="card-footer bg-white text-right">
-            <button type="submit" class="btn btn-primary btn-sm shadow-sm">
-                <i class="fas fa-save mr-1"></i> Simpan
-            </button>
-        </div>
+            <div class="card-footer bg-white d-flex justify-content-end text-right py-3 px-4">
+                <button type="submit" class="btn btn-primary text-white px-4">
+                    <i class="fas fa-save me-1"></i> Simpan
+                </button>
+            </div>
     </div>
 </form>
 @stop
